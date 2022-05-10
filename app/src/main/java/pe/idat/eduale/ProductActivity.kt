@@ -9,6 +9,7 @@ import pe.idat.eduale.adapter.ProductAdapter
 import pe.idat.eduale.databinding.ActivityProductBinding
 import pe.idat.eduale.model.ProductModel
 import pe.idat.eduale.network.ProductRetroService
+import pe.idat.eduale.network.RetroInstance
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,15 +35,9 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
     }
 
     private fun getMyData(){
-        val retrofitBuilder = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("http://10.0.2.2:8090/")
-            .build()
-            .create(ProductRetroService::class.java)
+        val retrofitData = RetroInstance().getRetroInstance().create(ProductRetroService::class.java)
 
-        val retrofitData = retrofitBuilder.getProductList()
-
-        retrofitData.enqueue(object: Callback<List<ProductModel>?> {
+        retrofitData.getProductList().enqueue(object: Callback<List<ProductModel>?> {
             override fun onResponse(
                 call: Call<List<ProductModel>?>,
                 response: Response<List<ProductModel>?>
