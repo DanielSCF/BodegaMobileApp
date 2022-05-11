@@ -1,6 +1,6 @@
 package pe.idat.eduale.model
 
-data class LoteModel(
+data class BatchModel(
     val loteID: Int?,
     val fingreso: String?,
     val fvencimiento: String?

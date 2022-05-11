@@ -1,6 +1,6 @@
 package pe.idat.eduale.model
 
-data class CategoriaModel(
+data class CategoryModel(
     val categoriaID: Int?,
     val nombre: String?,
     val estado: String?

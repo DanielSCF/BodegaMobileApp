@@ -10,6 +10,7 @@ class ProductViewHolder (view: View): RecyclerView.ViewHolder(view){
     var binding = ItemProductBinding.bind(view)
 
     fun render(productModel: ProductModel){
+        //replaceFirstChat
         binding.txtNombreProducto.text = productModel.nombre+ " - " + productModel.descripcion
         binding.txtPrecio.text = "S/." + productModel.precioventa.toString()
 
