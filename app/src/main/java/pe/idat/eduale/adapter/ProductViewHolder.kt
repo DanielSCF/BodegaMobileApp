@@ -13,7 +13,7 @@ class ProductViewHolder (view: View): RecyclerView.ViewHolder(view){
     fun render(productModel: ProductModel){
         binding.txtNombreProducto.text = productModel.nombre+ " - " + productModel.descripcion
         binding.txtPrecio.text = "S/." + productModel.precioventa.toString()
-        binding.txtMarca.text = productModel.marca.toString()
+        binding.txtMarca.text = productModel.marca?.nombre.toString()
 
         Glide.with(binding.ImgProduct.context).load(productModel.imagen).into(binding.ImgProduct)
     }
