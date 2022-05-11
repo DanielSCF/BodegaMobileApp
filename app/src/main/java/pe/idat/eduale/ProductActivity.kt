@@ -99,8 +99,11 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
     }
 
     override fun onQueryTextChange(query: String?): Boolean {
+        if(query.isNullOrBlank()){
+            productsList.clear()
+            getMyData()
+        }
+
         return true
     }
-
-
 }
