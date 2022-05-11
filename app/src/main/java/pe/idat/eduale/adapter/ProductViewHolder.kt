@@ -4,7 +4,6 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import pe.idat.eduale.databinding.ItemProductBinding
-import pe.idat.eduale.model.MarcaModel
 import pe.idat.eduale.model.ProductModel
 
 class ProductViewHolder (view: View): RecyclerView.ViewHolder(view){
@@ -13,6 +12,8 @@ class ProductViewHolder (view: View): RecyclerView.ViewHolder(view){
     fun render(productModel: ProductModel){
         binding.txtNombreProducto.text = productModel.nombre+ " - " + productModel.descripcion
         binding.txtPrecio.text = "S/." + productModel.precioventa.toString()
+
+
         binding.txtMarca.text = productModel.marca?.nombre.toString()
 
         Glide.with(binding.ImgProduct.context).load(productModel.imagen).into(binding.ImgProduct)

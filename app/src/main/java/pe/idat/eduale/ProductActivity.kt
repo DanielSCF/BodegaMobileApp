@@ -3,7 +3,7 @@ package pe.idat.eduale
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import pe.idat.eduale.adapter.ProductAdapter
 import pe.idat.eduale.databinding.ActivityProductBinding
@@ -20,6 +20,8 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
     private lateinit var myAdapter: ProductAdapter
     private lateinit var gridLayoutManager: GridLayoutManager
 
+    var productsList = mutableListOf<ProductModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProductBinding.inflate(layoutInflater)
@@ -28,6 +30,8 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
         binding.recyclerProducts.setHasFixedSize(true)
         gridLayoutManager = GridLayoutManager(this, 2)
         binding.recyclerProducts.layoutManager = gridLayoutManager
+
+        binding.txtSearch.setOnQueryTextListener(this)
 
         getMyData()
     }
@@ -40,9 +44,13 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
                 call: Call<List<ProductModel>?>,
                 response: Response<List<ProductModel>?>
             ) {
-                val responseBody = response.body()!!
+                val responseBody = response.body()
 
-                myAdapter = ProductAdapter(responseBody)
+                val products = responseBody ?: emptyList()
+
+                productsList.addAll(products)
+
+                myAdapter = ProductAdapter(productsList)
                 myAdapter.notifyDataSetChanged()
                 binding.recyclerProducts.adapter = myAdapter
 
@@ -55,12 +63,44 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
         })
     }
 
-    override fun onQueryTextSubmit(p0: String?): Boolean {
-        TODO("Not yet implemented")
+    private fun searchProducts(query:String){
+        val retrofitData = RetroInstance().getRetroInstance().create(ProductRetroService::class.java)
+
+        retrofitData.getProductByName(query).enqueue(object: Callback<List<ProductModel>?> {
+            override fun onResponse(
+                call: Call<List<ProductModel>?>,
+                response: Response<List<ProductModel>?>
+            ) {
+                val responseBody = response.body()
+
+                val products = responseBody ?: emptyList()
+
+                productsList.clear()
+                productsList.addAll(products)
+                myAdapter = ProductAdapter(productsList)
+                myAdapter.notifyDataSetChanged()
+                binding.recyclerProducts.adapter = myAdapter
+
+            }
+
+            override fun onFailure(call: Call<List<ProductModel>?>, t: Throwable) {
+                Log.d("MainActivity","onFailure: "+ t.message)
+            }
+
+        })
+
     }
 
-    override fun onQueryTextChange(p0: String?): Boolean {
-        TODO("Not yet implemented")
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if(!query.isNullOrBlank()){
+            searchProducts(query)
+        }
+        return true
     }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        return true
+    }
+
 
 }

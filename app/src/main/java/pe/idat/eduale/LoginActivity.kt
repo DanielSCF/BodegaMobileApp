@@ -38,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun login(){
-        val request= UserLoginRequest()
+        val request = UserLoginRequest()
 
         request.nickname = binding.usernameEditText.text.toString().trim()
         request.clave = binding.passwordEditText.text.toString().trim()

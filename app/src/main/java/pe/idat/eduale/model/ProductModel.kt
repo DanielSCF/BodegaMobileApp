@@ -9,6 +9,7 @@ data class ProductModel(
     val stock: Int?,
     val estado: String?,
     val imagen: String?,
+
     val categoria: CategoriaModel?,
     val marca: MarcaModel?,
     val lote: LoteModel?

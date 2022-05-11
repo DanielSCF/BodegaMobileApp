@@ -9,7 +9,7 @@ interface ProductRetroService {
     @GET("productos")
     fun getProductList(): Call<List<ProductModel>>
 
-    @GET("productos/{nombre}")
+    @GET("productos/buscar/{nombre}")
     fun getProductByName(@Path("nombre") nombre:String): Call<List<ProductModel>>
 
 }
