@@ -13,8 +13,6 @@ import pe.idat.eduale.network.RetroInstance
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
 
