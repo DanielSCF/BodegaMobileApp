@@ -60,16 +60,17 @@
             android:layout_alignParentEnd="true"
             />
 
-        <androidx.appcompat.widget.AppCompatSpinner
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/spAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spAmount"
+            android:layout_alignParentEnd="true"
+            tools:text="Cantidad"
+            android:textColorHint="@color/black"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="6dp"
-            android:layout_marginRight="6dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            />
+            android:layout_marginRight="6dp" />
 
 
     </RelativeLayout>
