@@ -52,7 +52,7 @@ class RegisterUserActivity: AppCompatActivity() {
 
     fun registro(){
 
-        val request=UserRegisterModel(estado="A",nickname =binding.usernameEditText.text.toString().trim(),clave = binding.passwordEditText.text.toString().trim(),tipoAcceso =UserAccessModel(1),
+        val request=UserRegisterModel(estado="A",nickname =binding.usernameEditText.text.toString().trim(),clave = binding.passwordEditText.text.toString().trim(),tipoAcceso =UserAccessModel(3),
             cliente= ClientModel(nombre = binding.nombresEditText.text.toString().trim(),apellidos = binding.apellidoEditText.text.toString(),dni = binding.dniEditText.text.toString().trim(),
                 direccion = binding.dniEditText.text.toString().trim(),telefono = binding.telefonoEditText.text.toString().trim()))
 
