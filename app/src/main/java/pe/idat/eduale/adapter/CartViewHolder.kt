@@ -14,6 +14,8 @@ class CartViewHolder (view:View): RecyclerView.ViewHolder(view){
         binding.txtNombreProducto.text = cartModel.product.nombre+ " - " + cartModel.product.descripcion
         binding.txtPrecio.text = "S/." + cartModel.product.precioventa.toString()
 
+        val initialAmount = 1
+        binding.txtAmount.setText(initialAmount)
 
         Glide.with(binding.ImgProduct.context).load(cartModel.product.imagen).into(binding.ImgProduct)
     }
