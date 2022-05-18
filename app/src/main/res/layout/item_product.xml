@@ -68,7 +68,7 @@
                 android:text="@string/add_cart"
                 tools:text="Add to the cart"
                 android:textAlignment="center"
-                android:backgroundTint="@color/azul"
+                android:backgroundTint="@color/light_blue"
                 />
 
 

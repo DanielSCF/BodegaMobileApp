@@ -1,5 +1,6 @@
 package pe.idat.eduale
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +33,10 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
         binding.recyclerProducts.layoutManager = gridLayoutManager
 
         binding.txtSearch.setOnQueryTextListener(this)
+
+        binding.btnShoppingCart.setOnClickListener{
+            startActivity(Intent(this, CartActivity::class.java))
+        }
 
         getMyData()
     }
