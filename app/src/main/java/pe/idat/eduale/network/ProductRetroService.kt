@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface ProductRetroService {
+
     @GET("productos")
     fun getProductList(): Call<List<ProductModel>>
 
