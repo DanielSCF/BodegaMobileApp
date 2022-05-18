@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pe.idat.eduale.R
-import pe.idat.eduale.model.CartModel
+import pe.idat.eduale.room.cart.CartModel
 
-class CartAdapter (val cartList: MutableList<CartModel>): RecyclerView.Adapter<CartViewHolder>() {
+class CartAdapter (var cartList: MutableList<CartModel>): RecyclerView.Adapter<CartViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
         var layoutInflater = LayoutInflater.from(parent.context)
         return CartViewHolder(layoutInflater.inflate(R.layout.item_cart, parent, false))
@@ -18,4 +18,14 @@ class CartAdapter (val cartList: MutableList<CartModel>): RecyclerView.Adapter<C
     }
 
     override fun getItemCount(): Int = cartList.size
+
+    fun newItem(cartModel: CartModel){
+        cartList.add(cartModel)
+        notifyDataSetChanged()
+    }
+
+    fun setItems(cartList:MutableList<CartModel>){
+        this.cartList = cartList
+    }
+
 }

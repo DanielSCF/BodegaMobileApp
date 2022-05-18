@@ -6,20 +6,24 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
+import pe.idat.eduale.adapter.CartAdapter
 import pe.idat.eduale.adapter.ProductAdapter
 import pe.idat.eduale.databinding.ActivityProductBinding
 import pe.idat.eduale.model.ProductModel
 import pe.idat.eduale.network.ProductRetroService
 import pe.idat.eduale.network.RetroInstance
+import pe.idat.eduale.room.cart.CartApp
+import pe.idat.eduale.room.cart.CartModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
+class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, onProductListener{
 
     private lateinit var binding:ActivityProductBinding
     private lateinit var myAdapter: ProductAdapter
     private lateinit var gridLayoutManager: GridLayoutManager
+    private lateinit var cartAdapter: CartAdapter
 
     var productsList = mutableListOf<ProductModel>()
 
@@ -55,7 +59,7 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
 
                 productsList.addAll(products)
 
-                myAdapter = ProductAdapter(productsList)
+                myAdapter = ProductAdapter(productsList,this@ProductActivity)
                 myAdapter.notifyDataSetChanged()
                 binding.recyclerProducts.adapter = myAdapter
 
@@ -82,7 +86,7 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
 
                 productsList.clear()
                 productsList.addAll(products)
-                myAdapter = ProductAdapter(productsList)
+                myAdapter = ProductAdapter(productsList, this@ProductActivity )
                 myAdapter.notifyDataSetChanged()
                 binding.recyclerProducts.adapter = myAdapter
 
@@ -110,5 +114,21 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener{
         }
 
         return true
+    }
+
+    override fun onProductClick(position: Int) {
+        val product = productsList.get(position)
+        val cart = CartModel(
+            cantidad = 1,
+            subtotal = product.precioventa,
+            productId = product.productoid,
+            total = product.precioventa
+        )
+        registerItem(cart)
+    }
+
+    private fun registerItem(cartModel: CartModel){
+        CartApp.database.cartDao().cartAdd(cartModel)
+        cartAdapter.newItem(cartModel)
     }
 }
