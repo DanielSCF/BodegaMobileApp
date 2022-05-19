@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import pe.idat.eduale.adapter.CartAdapter
 import pe.idat.eduale.adapter.ProductAdapter
 import pe.idat.eduale.databinding.ActivityProductBinding
@@ -112,7 +114,6 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
             productsList.clear()
             getMyData()
         }
-
         return true
     }
 
@@ -128,7 +129,12 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
     }
 
     private fun registerItem(cartModel: CartModel){
-        CartApp.database.cartDao().cartAdd(cartModel)
-        cartAdapter.newItem(cartModel)
+        doAsync {
+            CartApp.database.cartDao().cartAdd(cartModel)
+
+            uiThread {
+                cartAdapter.newItem(cartModel)
+            }
+        }
     }
 }

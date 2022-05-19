@@ -28,15 +28,11 @@ class CartViewHolder (view:View): RecyclerView.ViewHolder(view){
                     if (responseBody != null) {
                         productModel = responseBody
                     }
-
                 }
-
                 override fun onFailure(call: Call<ProductModel>, t: Throwable) {
                     Log.d("MainActivity","onFailure: "+ t.message)
                 }
-
             })
-
         }catch (e: IOException){
             Log.d("MainActivity","onFailure: "+ e.message)
         }

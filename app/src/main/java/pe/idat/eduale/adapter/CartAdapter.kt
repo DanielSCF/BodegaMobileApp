@@ -26,6 +26,7 @@ class CartAdapter (var cartList: MutableList<CartModel>): RecyclerView.Adapter<C
 
     fun setItems(cartList:MutableList<CartModel>){
         this.cartList = cartList
+        notifyDataSetChanged()
     }
 
 }

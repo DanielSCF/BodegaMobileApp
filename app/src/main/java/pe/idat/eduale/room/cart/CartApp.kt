@@ -9,10 +9,8 @@ class CartApp : Application(){
         lateinit var database: CartDB
     }
 
-    //val cartRoom = Room.databaseBuilder(this, CartDB::class.java, "CartDB").build()
-
     override fun onCreate() {
         super.onCreate()
-        database= Room.databaseBuilder(this,CartDB::class.java,"ProductDB").build()
+        database = Room.databaseBuilder(this,CartDB::class.java,"CartDB").build()
     }
 }
