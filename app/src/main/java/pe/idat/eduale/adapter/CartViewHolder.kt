@@ -8,6 +8,7 @@ import pe.idat.eduale.room.cart.CartModel
 
 class CartViewHolder (view:View): RecyclerView.ViewHolder(view){
     var binding = ItemCartBinding.bind(view)
+    var deleteItem = binding.btnDelete
 
     fun render(cartModel: CartModel){
         binding.txtNombreProducto.text = cartModel.nombre

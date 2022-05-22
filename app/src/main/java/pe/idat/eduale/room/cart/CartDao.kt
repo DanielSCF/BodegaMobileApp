@@ -10,9 +10,6 @@ interface CartDao {
     @Query("SELECT * FROM CartModel  WHERE id = :id")
     fun getById(id: Int): CartModel
 
-    @Query("SELECT subtotal FROM cartmodel")
-    fun getSubtotales(): MutableList<SubtotalList>
-
     @Insert
     fun addItem(cartModel: CartModel)
 

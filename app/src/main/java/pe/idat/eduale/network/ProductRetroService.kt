@@ -17,6 +17,4 @@ interface ProductRetroService {
     @GET("productos/{productoid}")
     fun getProductById(@Path("productoid") productoid:Int): Call<ProductModel>
 
-    @PUT("productos/stock/{productoid}/{cantidad}")
-    fun actualizarStock(@Path("productoid") productoid:Int, @Path("cantidad") cantidad:Int)
 }

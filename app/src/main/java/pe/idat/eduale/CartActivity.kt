@@ -8,13 +8,17 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import pe.idat.eduale.adapter.CartAdapter
 import pe.idat.eduale.databinding.ActivityCartBinding
+import pe.idat.eduale.model.ProductModel
 import pe.idat.eduale.room.cart.CartApp
+import pe.idat.eduale.room.cart.CartModel
+import pe.idat.eduale.room.cart.onItemListener
 
-class CartActivity : AppCompatActivity() {
+class CartActivity : AppCompatActivity(), onItemListener {
 
     private lateinit var binding: ActivityCartBinding
     private lateinit var cartAdapter: CartAdapter
     private lateinit var mGridLayout: GridLayoutManager
+    var itemList = mutableListOf<CartModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +33,7 @@ class CartActivity : AppCompatActivity() {
     }
 
     private fun setCartRecyclerView(){
-        cartAdapter = CartAdapter(mutableListOf())
+        cartAdapter = CartAdapter(mutableListOf(), this@CartActivity)
         mGridLayout = GridLayoutManager(this,1)
 
         getCartList()
@@ -46,7 +50,8 @@ class CartActivity : AppCompatActivity() {
         doAsync {
             val items = CartApp.database.cartDao().cartList()
             uiThread {
-                cartAdapter.setItems(items)
+                itemList.addAll(items)
+                cartAdapter.setItems(itemList)
             }
         }
     }
@@ -54,13 +59,30 @@ class CartActivity : AppCompatActivity() {
     private fun setTotal(){
         doAsync {
             val items = CartApp.database.cartDao().cartList()
-
             val total = items.sumOf { it.precio }
 
             uiThread {
                 binding.txtTotal.text = "Total: S/." + total
             }
         }
+    }
+
+    //Eliminar de la lista
+    private fun deleteItem(cartModel: CartModel){
+        doAsync {
+            CartApp.database.cartDao().deleteItem(cartModel)
+            uiThread {
+                itemList.remove(cartModel)
+                cartAdapter.deleteItem(cartModel)
+            }
+        }
+    }
+
+    override fun onDeleteClick(position: Int) {
+        val item = itemList.get(position)
+        deleteItem(item)
+        startActivity(Intent(this, CartActivity::class.java))
+        finish()
     }
 
 }

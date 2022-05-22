@@ -16,11 +16,12 @@ import pe.idat.eduale.network.ProductRetroService
 import pe.idat.eduale.network.RetroInstance
 import pe.idat.eduale.room.cart.CartApp
 import pe.idat.eduale.room.cart.CartModel
+import pe.idat.eduale.room.cart.onItemListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, onProductListener{
+class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, onProductListener, onItemListener{
 
     private lateinit var binding:ActivityProductBinding
     private lateinit var myAdapter: ProductAdapter
@@ -33,7 +34,7 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
         binding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        cartAdapter = CartAdapter(mutableListOf())
+        cartAdapter = CartAdapter(mutableListOf(), this@ProductActivity)
 
         binding.recyclerProducts.setHasFixedSize(true)
         gridLayoutManager = GridLayoutManager(this, 2)
@@ -148,5 +149,9 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
                 cartAdapter.newItem(cartModel)
             }
         }
+    }
+
+    override fun onDeleteClick(position: Int) {
+        TODO("Not yet implemented")
     }
 }
