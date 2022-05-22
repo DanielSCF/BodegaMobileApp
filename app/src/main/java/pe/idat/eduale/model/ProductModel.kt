@@ -13,5 +13,4 @@ data class ProductModel(
     val categoria: CategoryModel?,
     val marca: BrandModel?,
     val lote: BatchModel?
-
 )

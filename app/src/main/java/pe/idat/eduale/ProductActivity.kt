@@ -25,14 +25,15 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
     private lateinit var binding:ActivityProductBinding
     private lateinit var myAdapter: ProductAdapter
     private lateinit var gridLayoutManager: GridLayoutManager
-    private lateinit var cartAdapter: CartAdapter
-
+    private lateinit var cartAdapter:CartAdapter
     var productsList = mutableListOf<ProductModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        cartAdapter = CartAdapter(mutableListOf())
 
         binding.recyclerProducts.setHasFixedSize(true)
         gridLayoutManager = GridLayoutManager(this, 2)
@@ -47,6 +48,7 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
         getMyData()
     }
 
+    //Listado de productos
     private fun getMyData(){
         val retrofitData = RetroInstance().getRetroInstance().create(ProductRetroService::class.java)
 
@@ -74,6 +76,7 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
         })
     }
 
+    //Busqueda de productos
     private fun searchProducts(query:String){
         val retrofitData = RetroInstance().getRetroInstance().create(ProductRetroService::class.java)
 
@@ -117,20 +120,29 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
         return true
     }
 
+
+    //Product button click
     override fun onProductClick(position: Int) {
         val product = productsList.get(position)
+
+        val cantidad = 1
+        val precio = product.precioventa
+        val subtotal = cantidad * precio!!
+
         val cart = CartModel(
-            cantidad = 1,
-            subtotal = product.precioventa,
-            productId = product.productoid,
-            total = product.precioventa
+            nombre = product.nombre + " - " + product.descripcion,
+            precio = precio,
+            cantidad = cantidad,
+            imagen = product.imagen!!,
+            subtotal = subtotal,
+            productId = product.productoid!!
         )
         registerItem(cart)
     }
 
     private fun registerItem(cartModel: CartModel){
         doAsync {
-            CartApp.database.cartDao().cartAdd(cartModel)
+            CartApp.database.cartDao().addItem(cartModel)
 
             uiThread {
                 cartAdapter.newItem(cartModel)

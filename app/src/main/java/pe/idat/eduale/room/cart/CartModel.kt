@@ -7,9 +7,10 @@ import androidx.room.PrimaryKey
 data class CartModel(
     @PrimaryKey(autoGenerate = true)
     val id:Int=0,
-    val cantidad:Int?,
-    val subtotal:Double?,
-    val total:Double?,
-
-    val productId: Int?
+    val nombre:String,
+    val precio:Double,
+    val cantidad:Int,
+    val imagen:String,
+    val subtotal:Double,
+    val productId: Int
 )

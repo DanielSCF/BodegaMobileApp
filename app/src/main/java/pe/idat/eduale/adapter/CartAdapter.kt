@@ -6,27 +6,35 @@ import androidx.recyclerview.widget.RecyclerView
 import pe.idat.eduale.R
 import pe.idat.eduale.room.cart.CartModel
 
-class CartAdapter (var cartList: MutableList<CartModel>): RecyclerView.Adapter<CartViewHolder>() {
+class CartAdapter (var itemList:MutableList<CartModel>): RecyclerView.Adapter<CartViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        var layoutInflater = LayoutInflater.from(parent.context)
+        val layoutInflater = LayoutInflater.from(parent.context)
         return CartViewHolder(layoutInflater.inflate(R.layout.item_cart, parent, false))
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        val item = cartList[position]
+        val item = itemList[position]
         holder.render(item)
     }
 
-    override fun getItemCount(): Int = cartList.size
+    override fun getItemCount(): Int = itemList.size
 
-    fun newItem(cartModel: CartModel){
-        cartList.add(cartModel)
-        notifyDataSetChanged()
-    }
 
     fun setItems(cartList:MutableList<CartModel>){
-        this.cartList = cartList
+        this.itemList = cartList
         notifyDataSetChanged()
     }
 
+    fun newItem(cartModel: CartModel){
+        itemList.add(cartModel)
+        notifyDataSetChanged()
+    }
+
+    fun deleteItem(cartModel: CartModel){
+        val index = itemList.indexOf(cartModel)
+        if (index!=1){
+            itemList.removeAt(index)
+            notifyDataSetChanged()
+        }
+    }
 }

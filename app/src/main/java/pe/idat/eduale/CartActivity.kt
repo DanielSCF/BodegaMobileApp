@@ -24,13 +24,16 @@ class CartActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener{
             startActivity(Intent(this, ProductActivity::class.java))
         }
+
         setCartRecyclerView()
     }
 
     private fun setCartRecyclerView(){
         cartAdapter = CartAdapter(mutableListOf())
         mGridLayout = GridLayoutManager(this,1)
+
         getCartList()
+        setTotal()
 
         binding.recyclerCart.apply{
             setHasFixedSize(true)
@@ -44,6 +47,18 @@ class CartActivity : AppCompatActivity() {
             val items = CartApp.database.cartDao().cartList()
             uiThread {
                 cartAdapter.setItems(items)
+            }
+        }
+    }
+
+    private fun setTotal(){
+        doAsync {
+            val items = CartApp.database.cartDao().cartList()
+
+            val total = items.sumOf { it.precio }
+
+            uiThread {
+                binding.txtTotal.text = "Total: S/." + total
             }
         }
     }
