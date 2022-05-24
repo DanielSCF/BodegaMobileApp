@@ -90,8 +90,8 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:backgroundTint="@color/light_blue"
-            tools:text="Realizar pedido"
-            android:text="@string/make_order"/>
+            android:text="@string/make_order"
+            tools:text="Realizar pedido" />
 
     </RelativeLayout>
 

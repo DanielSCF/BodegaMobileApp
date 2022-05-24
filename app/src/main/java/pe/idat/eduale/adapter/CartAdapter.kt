@@ -24,7 +24,6 @@ class CartAdapter (var itemList:MutableList<CartModel>, private val onItemListen
 
     override fun getItemCount(): Int = itemList.size
 
-
     fun setItems(cartList:MutableList<CartModel>){
         this.itemList = cartList
         notifyDataSetChanged()
