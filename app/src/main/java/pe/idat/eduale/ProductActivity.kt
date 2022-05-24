@@ -1,9 +1,11 @@
 package pe.idat.eduale
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import org.jetbrains.anko.doAsync
@@ -20,10 +22,12 @@ import pe.idat.eduale.room.cart.onItemListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.content.Intent as Intent
 
 class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, onProductListener, onItemListener{
 
     private lateinit var binding:ActivityProductBinding
+    private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var myAdapter: ProductAdapter
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var cartAdapter:CartAdapter
@@ -47,6 +51,40 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
         }
 
         getMyData()
+
+
+        binding.apply {
+            toggle = ActionBarDrawerToggle(this@ProductActivity, drawerLayout, R.string.open, R.string.close)
+            drawerLayout.addDrawerListener(toggle)
+            toggle.syncState()
+
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+            navView.setNavigationItemSelectedListener {
+                when (it.itemId) {
+                    R.id.userInformation -> {
+                        Toast.makeText(this@ProductActivity, "Ejemplo 1", Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.clientInformation -> {
+                        val intent = Intent(this@ProductActivity, ClientInformationActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                    R.id.orderInformation -> {
+                        Toast.makeText(this@ProductActivity, "third Item Clicked", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                true
+            }
+        }
+    }
+
+    //Drawer menu
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (toggle.onOptionsItemSelected(item)){
+            true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     //Listado de productos

@@ -26,4 +26,6 @@
     <string name="client_information">Información personal</string>
     <string name="order_information">Pedidos realizados</string>
     <string name="welcome">Bienvenido</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>
