@@ -26,10 +26,18 @@ class CartActivity : AppCompatActivity(), onItemListener {
         setContentView(binding.root)
 
         binding.btnBack.setOnClickListener{
-            startActivity(Intent(this, ProductActivity::class.java))
+            val objetoIntent: Intent = intent
+            var ClienteID = objetoIntent.getStringExtra("ClienteID")
+            var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+
+            val value = Intent(this, ProductActivity::class.java)
+            value.putExtra("ClienteID",ClienteID)
+            value.putExtra("UsuarioID",UsuarioID)
+            startActivity(value)
         }
 
         setCartRecyclerView()
+        registerOrder()
     }
 
     private fun setCartRecyclerView(){
@@ -59,7 +67,7 @@ class CartActivity : AppCompatActivity(), onItemListener {
     private fun setTotal(){
         doAsync {
             val items = CartApp.database.cartDao().cartList()
-            val total = items.sumOf { it.precio }
+            val total = items.sumOf { it.subtotal }
 
             uiThread {
                 binding.txtTotal.text = "Total: S/." + total
@@ -84,8 +92,26 @@ class CartActivity : AppCompatActivity(), onItemListener {
 
         finish()
         overridePendingTransition(0,0)
-        startActivity(Intent(this, CartActivity::class.java))
+
+        val objetoIntent: Intent = intent
+        var ClienteID = objetoIntent.getStringExtra("ClienteID")
+        var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+
+        val value = Intent(this, CartActivity::class.java)
+        value.putExtra("ClienteID",ClienteID)
+        value.putExtra("UsuarioID",UsuarioID)
+        startActivity(value)
+
         overridePendingTransition(0,0)
+    }
+
+    private fun registerOrder(){
+        val objetoIntent: Intent = intent
+        var ClienteID = objetoIntent.getStringExtra("ClienteID")
+        var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+
+
+
     }
 
 }

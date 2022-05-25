@@ -7,7 +7,10 @@ import pe.idat.eduale.R
 import pe.idat.eduale.model.ProductModel
 import pe.idat.eduale.onProductListener
 
-class ProductAdapter (val productList:List<ProductModel>, private val onProductListener: onProductListener): RecyclerView.Adapter<ProductViewHolder>(){
+class ProductAdapter(
+    val productList: List<ProductModel>,
+    private val onProductListener: onProductListener
+) : RecyclerView.Adapter<ProductViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -19,8 +22,13 @@ class ProductAdapter (val productList:List<ProductModel>, private val onProductL
         holder.render(item)
 
         holder.addButton.setOnClickListener {
+            onProductListener.onProductButtonClick(position)
+        }
+
+        holder.productCard.setOnClickListener {
             onProductListener.onProductClick(position)
         }
+
     }
 
     override fun getItemCount(): Int = productList.size

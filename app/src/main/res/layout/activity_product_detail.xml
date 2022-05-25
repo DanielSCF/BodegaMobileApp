@@ -10,6 +10,7 @@
         android:id="@+id/ImgProduct"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:contentDescription="@string/product_image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,47 +29,118 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.072" />
 
-    <TextView
-        android:id="@+id/txtPrecio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.129"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ImgProduct"
-        app:layout_constraintVertical_bias="0.037"
-        tools:text="Precio de producto" />
 
-    <TextView
-        android:id="@+id/txtNombreProducto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btnShoppingCart"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_shopping_cart"
+        app:layout_constraintBottom_toBottomOf="@+id/ImgProduct"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.115"
+        app:layout_constraintHorizontal_bias="0.958"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPrecio"
-        app:layout_constraintVertical_bias="0.076"
-        tools:text="Nombre de producto" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.072" />
 
-    <TextView
-        android:id="@+id/txtStock"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/MaininfoContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:textStyle="bold"
+        android:background="@color/light_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.089"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNombreProducto"
-        app:layout_constraintVertical_bias="0.082"
-        tools:text="Stock de producto" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.423">
+
+        <TextView
+            android:id="@+id/txtPrecio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:textAlignment="viewStart"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            tools:text="Precio de producto" />
+
+        <TextView
+            android:id="@+id/txtNombreProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtPrecio"
+            android:layout_marginStart="35dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:textAlignment="viewStart"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            tools:text="Nombre de producto" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/DetailContainer"
+        android:layout_width="304dp"
+        android:layout_height="154dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MaininfoContainer">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/details"
+            android:textAlignment="viewStart"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Detalles" />
+
+        <TextView
+            android:id="@+id/txtMarca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="Marca del producto"
+            android:layout_below="@+id/textView3"
+            android:layout_marginStart="40dp" />
+
+        <TextView
+            android:id="@+id/txtCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="Categoria del producto"
+            android:layout_below="@+id/txtMarca"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/txtStock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="Stock del producto"
+            android:layout_below="@+id/txtCategoria"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="5dp"/>
+
+
+    </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ContainerCantidad"
@@ -76,10 +148,10 @@
         android:layout_height="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtStock"
-        app:layout_constraintVertical_bias="0.143">
+        app:layout_constraintTop_toBottomOf="@+id/DetailContainer"
+        app:layout_constraintVertical_bias="1.0">
 
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -87,7 +159,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:background="@drawable/ic_minus"
-            android:backgroundTint="@color/azul"
+            android:backgroundTint="@color/light_blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txtCantidad"
             app:layout_constraintHorizontal_bias="0.8"
@@ -101,6 +173,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
 
+            android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/btnMakeOrder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +185,7 @@
             android:layout_height="30dp"
             android:layout_marginEnd="56dp"
             android:background="@drawable/ic_add"
-            android:backgroundTint="@color/azul"
+            android:backgroundTint="@color/light_blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.4"
@@ -125,7 +198,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/azul"
+            android:backgroundTint="@color/light_blue"
             android:text="@string/make_order"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

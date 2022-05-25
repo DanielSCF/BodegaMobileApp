@@ -9,6 +9,7 @@ import pe.idat.eduale.model.ProductModel
 class ProductViewHolder (view: View): RecyclerView.ViewHolder(view){
     var binding = ItemProductBinding.bind(view)
     var addButton = binding.btnAddToCart
+    var productCard = binding.ProductCard
 
     fun render(productModel: ProductModel){
         binding.txtNombreProducto.text = productModel.nombre+ " - " + productModel.descripcion

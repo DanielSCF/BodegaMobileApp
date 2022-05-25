@@ -20,13 +20,17 @@ class ClientEditActivity : AppCompatActivity() {
         binding = ActivityClientEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val objetoIntent: Intent = intent
-        var Id = objetoIntent.getStringExtra("ClienteID")
-
         initAction()
 
         binding.btnBack.setOnClickListener {
-            startActivity(Intent(this, ClientInformationActivity::class.java))
+            val objetoIntent: Intent = intent
+            var ClienteID = objetoIntent.getStringExtra("ClienteID")
+            var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+
+            val value = Intent(this, ClientInformationActivity::class.java)
+            value.putExtra("ClienteID",ClienteID)
+            value.putExtra("UsuarioID",UsuarioID)
+            startActivity(value)
         }
     }
 

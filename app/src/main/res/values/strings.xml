@@ -41,4 +41,5 @@
     <string name="settings">Configuración</string>
     <string name="information">Información</string>
     <string name="actions">Acciones</string>
+    <string name="details">Detalles: </string>
 </resources>

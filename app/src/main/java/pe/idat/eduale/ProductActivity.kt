@@ -47,12 +47,21 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onP
 
         binding.txtSearch.setOnQueryTextListener(this)
 
+        //Shopping cart
         binding.btnShoppingCart.setOnClickListener {
-            startActivity(Intent(this, CartActivity::class.java))
+            val value = Intent(this, CartActivity::class.java)
+
+            val objetoIntent: Intent = intent
+            var ClienteID = objetoIntent.getStringExtra("ClienteID")
+            var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+            value.putExtra("ClienteID", ClienteID)
+            value.putExtra("UsuarioID", UsuarioID)
+            startActivity(value)
         }
 
         getMyData()
 
+        //Drawer menu
         binding.apply {
             toggle = ActionBarDrawerToggle(
                 this@ProductActivity,
@@ -98,11 +107,6 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onP
                 true
             }
         }
-    }
-
-    //Cliente and user information
-    private fun clientInformation(){
-
     }
 
     //Drawer menu
@@ -189,7 +193,7 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onP
 
 
     //Product button click
-    override fun onProductClick(position: Int) {
+    override fun onProductButtonClick(position: Int) {
         val product = productsList.get(position)
 
         val cantidad = 1
@@ -205,6 +209,7 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onP
             productId = product.productoid!!
         )
         registerItem(cart)
+        Toast.makeText(this, "Añadido al carrito", Toast.LENGTH_SHORT).show()
     }
 
     private fun registerItem(cartModel: CartModel) {
@@ -215,6 +220,30 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onP
                 cartAdapter.newItem(cartModel)
             }
         }
+    }
+
+    //Detail product
+    override fun onProductClick(position: Int) {
+        val product = productsList.get(position)
+
+        val value = Intent(this,ProductDetailActivity::class.java)
+
+        val objetoIntent: Intent = intent
+        var ClienteID = objetoIntent.getStringExtra("ClienteID")
+        var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+
+        value.putExtra("ClienteID", ClienteID)
+        value.putExtra("UsuarioID", UsuarioID)
+
+        value.putExtra("productoid", product.productoid.toString())
+        value.putExtra("nombreDesc", product.nombre + " " + product.descripcion)
+        value.putExtra("precio", product.precioventa.toString())
+        value.putExtra("stock", product.stock.toString())
+        value.putExtra("imagen", product.imagen)
+        value.putExtra("categoria", product.categoria!!.nombre)
+        value.putExtra("marca", product.marca!!.nombre)
+
+        startActivity(value)
     }
 
     override fun onDeleteClick(position: Int) {
