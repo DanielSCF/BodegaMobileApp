@@ -71,13 +71,27 @@
         app:layout_constraintTop_toBottomOf="@+id/recyclerCart">
 
         <TextView
-            android:id="@+id/txtTotal"
+            android:id="@+id/txtTotalText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="10dp"
             android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Total: S/." />
+
+        <TextView
+            android:id="@+id/txtTotalValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="100dp"
+            android:layout_marginLeft="0dp"
+            android:layout_toRightOf="@+id/txtTotalText"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:text="Total" />

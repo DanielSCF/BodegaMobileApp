@@ -3,15 +3,27 @@ package pe.idat.eduale
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import pe.idat.eduale.adapter.CartAdapter
 import pe.idat.eduale.databinding.ActivityCartBinding
+import pe.idat.eduale.model.ClientModel
+import pe.idat.eduale.model.OrderDetailModel
+import pe.idat.eduale.model.OrderModel
 import pe.idat.eduale.model.ProductModel
+import pe.idat.eduale.network.OrderDetailService
+import pe.idat.eduale.network.OrderService
+import pe.idat.eduale.network.RetroInstance
 import pe.idat.eduale.room.cart.CartApp
 import pe.idat.eduale.room.cart.CartModel
 import pe.idat.eduale.room.cart.onItemListener
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CartActivity : AppCompatActivity(), onItemListener {
 
@@ -25,36 +37,39 @@ class CartActivity : AppCompatActivity(), onItemListener {
         binding = ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnBack.setOnClickListener{
+        binding.btnBack.setOnClickListener {
             val objetoIntent: Intent = intent
             var ClienteID = objetoIntent.getStringExtra("ClienteID")
             var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
 
             val value = Intent(this, ProductActivity::class.java)
-            value.putExtra("ClienteID",ClienteID)
-            value.putExtra("UsuarioID",UsuarioID)
+            value.putExtra("ClienteID", ClienteID)
+            value.putExtra("UsuarioID", UsuarioID)
             startActivity(value)
         }
 
         setCartRecyclerView()
-        registerOrder()
+
+        binding.btnRealizarPedido.setOnClickListener {
+            registerOrder()
+        }
     }
 
-    private fun setCartRecyclerView(){
+    private fun setCartRecyclerView() {
         cartAdapter = CartAdapter(mutableListOf(), this@CartActivity)
-        mGridLayout = GridLayoutManager(this,1)
+        mGridLayout = GridLayoutManager(this, 1)
 
         getCartList()
         setTotal()
 
-        binding.recyclerCart.apply{
+        binding.recyclerCart.apply {
             setHasFixedSize(true)
             adapter = cartAdapter
             layoutManager = mGridLayout
         }
     }
 
-    private fun getCartList(){
+    private fun getCartList() {
         doAsync {
             val items = CartApp.database.cartDao().cartList()
             uiThread {
@@ -64,19 +79,19 @@ class CartActivity : AppCompatActivity(), onItemListener {
         }
     }
 
-    private fun setTotal(){
+    private fun setTotal() {
         doAsync {
             val items = CartApp.database.cartDao().cartList()
             val total = items.sumOf { it.subtotal }
 
             uiThread {
-                binding.txtTotal.text = "Total: S/." + total
+                binding.txtTotalValue.text = total.toString()
             }
         }
     }
 
     //Eliminar de la lista
-    private fun deleteItem(cartModel: CartModel){
+    private fun deleteItem(cartModel: CartModel) {
         doAsync {
             CartApp.database.cartDao().deleteItem(cartModel)
             uiThread {
@@ -91,27 +106,82 @@ class CartActivity : AppCompatActivity(), onItemListener {
         deleteItem(item)
 
         finish()
-        overridePendingTransition(0,0)
+        overridePendingTransition(0, 0)
 
         val objetoIntent: Intent = intent
         var ClienteID = objetoIntent.getStringExtra("ClienteID")
         var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
 
         val value = Intent(this, CartActivity::class.java)
-        value.putExtra("ClienteID",ClienteID)
-        value.putExtra("UsuarioID",UsuarioID)
+        value.putExtra("ClienteID", ClienteID)
+        value.putExtra("UsuarioID", UsuarioID)
         startActivity(value)
 
-        overridePendingTransition(0,0)
+        overridePendingTransition(0, 0)
     }
 
-    private fun registerOrder(){
+    //Make order
+    private fun registerOrder() {
         val objetoIntent: Intent = intent
-        var ClienteID = objetoIntent.getStringExtra("ClienteID")
-        var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+        var ClienteID = objetoIntent.getStringExtra("ClienteID").toString().toInt()
+
+        val total = binding.txtTotalValue.toString().toDouble()
+
+        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        val currentDate = sdf.format(Date())
+
+        val request = OrderModel(
+            pedidoID = null,
+            fecha = currentDate.toString(),
+            total = total,
+            modalidad = "RECOJO",
+            cliente = ClientModel(ClienteID, null, null, null, null, null),
+            trabajador = null
+        )
+
+
+        val retro = RetroInstance().getRetroInstance().create(OrderService::class.java)
+        retro.guardarpedido(request).enqueue(object : Callback<OrderModel> {
+            override fun onResponse(call: Call<OrderModel>, response: Response<OrderModel>) {
+                val user = response.body()
 
 
 
+                //AQUI SE REQUIERE UN REPETIDOR PARA GUARDAR LOS PRODUCTOS :V
+                val request1 = OrderDetailModel(
+                    pedido = OrderModel(user?.pedidoID.toString().toInt(), null, null, null, null, null),
+                    cantidad = 2,
+                    precio_venta = 2.0,
+                    producto = ProductModel(2, null, null, null, null, null, null, null, null, null , null),
+                    subtotal = 4.0
+                )
+                val retro1 = RetroInstance().getRetroClientInstance().create(OrderDetailService::class.java)
+
+                retro1.registrarPedido(request1)
+                    .enqueue(object : Callback<OrderDetailModel> {
+                        override fun onResponse(
+                            call: Call<OrderDetailModel>,
+                            response: Response<OrderDetailModel>
+                        ) {
+                            if (response.isSuccessful) {
+                                Toast.makeText(this@CartActivity, "Pedido registrado", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                        override fun onFailure(
+                            call: Call<OrderDetailModel>,
+                            t: Throwable
+                        ) {
+                            Toast.makeText(this@CartActivity, "Error al registrar pedido", Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
+                //Hasta aqui :v
+
+            }
+            override fun onFailure(call: Call<OrderModel>, t: Throwable) {
+                Toast.makeText(this@CartActivity, "Error al registrar pedido", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
-
 }
