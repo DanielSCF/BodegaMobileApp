@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/atras"
+            android:id="@+id/btnBack"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="50dp"
             android:layout_height="50dp"

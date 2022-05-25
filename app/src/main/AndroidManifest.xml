@@ -15,6 +15,9 @@
         android:theme="@style/Theme.EdualeMobileApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ProductDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ClientEditActivity"
             android:exported="false" />
         <activity

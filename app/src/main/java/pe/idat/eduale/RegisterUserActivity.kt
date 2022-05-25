@@ -8,7 +8,7 @@ import android.widget.Toast
 import pe.idat.eduale.databinding.ActivityRegisterUserBinding
 import pe.idat.eduale.model.ClientModel
 import pe.idat.eduale.model.UserAccessModel
-import pe.idat.eduale.model.UserRegisterModel
+import pe.idat.eduale.model.UserModel
 import pe.idat.eduale.network.RetroInstance
 import pe.idat.eduale.network.UserRetroService
 import retrofit2.Call
@@ -52,22 +52,27 @@ class RegisterUserActivity: AppCompatActivity() {
 
     fun registro(){
 
-        val request=UserRegisterModel(
+        val request=UserModel(
+            usuarioID = null,
+            trabajador = null,
             estado="A",
             nickname =binding.usernameEditText.text.toString().trim(),
             clave = binding.passwordEditText.text.toString().trim(),
-            tipoAcceso = UserAccessModel(3),
+            tipoAcceso = UserAccessModel(3, null, null, null),
             cliente= ClientModel(nombre = binding.nombresEditText.text.toString().trim(),
                 apellidos = binding.apellidoEditText.text.toString(),
                 dni = binding.dniEditText.text.toString().trim(),
                 direccion = binding.direccionEditText.text.toString().trim(),
-                telefono = binding.telefonoEditText.text.toString().trim()))
+                telefono = binding.telefonoEditText.text.toString().trim(),
+                clienteID = null
+            )
+        )
 
 
         val retro= RetroInstance().getRetroClientInstance().create(UserRetroService::class.java)
-        retro.guardarusuario(request).enqueue(object : Callback<UserRegisterModel> {
+        retro.guardarusuario(request).enqueue(object : Callback<UserModel> {
 
-            override fun onResponse(call: Call<UserRegisterModel>, response: Response<UserRegisterModel>) {
+            override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
                 if(response.isSuccessful)
                 {
                     Toast.makeText(this@RegisterUserActivity, "Registro Correcto", Toast.LENGTH_LONG).show()
@@ -78,7 +83,7 @@ class RegisterUserActivity: AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<UserRegisterModel>, t: Throwable) {
+            override fun onFailure(call: Call<UserModel>, t: Throwable) {
                 Toast.makeText(this@RegisterUserActivity, "Throwable"+t.localizedMessage, Toast.LENGTH_LONG).show()
             }
 

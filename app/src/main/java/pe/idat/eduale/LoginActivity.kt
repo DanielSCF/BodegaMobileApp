@@ -7,7 +7,7 @@ import android.text.TextUtils
 import android.widget.Toast
 import pe.idat.eduale.databinding.ActivityLoginBinding
 import pe.idat.eduale.model.UserLoginRequest
-import pe.idat.eduale.model.UserLoginResponse
+import pe.idat.eduale.model.UserResponse
 import pe.idat.eduale.network.RetroInstance
 import pe.idat.eduale.network.UserRetroService
 import retrofit2.Call
@@ -46,9 +46,9 @@ class LoginActivity : AppCompatActivity() {
         val retro = RetroInstance().getRetroClientInstance()
             .create(UserRetroService::class.java)
 
-        retro.login(request).enqueue(object : Callback<UserLoginResponse> {
+        retro.login(request).enqueue(object : Callback<UserResponse> {
 
-            override fun onResponse(call: Call<UserLoginResponse>, response: Response<UserLoginResponse>) {
+            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
 
                 val user=response.body()
 
@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
 
             }
 
-            override fun onFailure(call: Call<UserLoginResponse>, t: Throwable) {
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 Toast.makeText(this@LoginActivity, "Throwable"+t.localizedMessage,Toast.LENGTH_LONG).show()
             }
         })
