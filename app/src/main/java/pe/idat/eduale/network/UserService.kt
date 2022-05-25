@@ -7,7 +7,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface UserRetroService {
+interface UserService {
 
     @POST("usuarios/login")
     fun login (@Body userRequest: UserLoginRequest): Call<UserResponse>

@@ -14,7 +14,7 @@ import pe.idat.eduale.adapter.CartAdapter
 import pe.idat.eduale.adapter.ProductAdapter
 import pe.idat.eduale.databinding.ActivityProductBinding
 import pe.idat.eduale.model.ProductModel
-import pe.idat.eduale.network.ProductRetroService
+import pe.idat.eduale.network.ProductService
 import pe.idat.eduale.network.RetroInstance
 import pe.idat.eduale.room.cart.CartApp
 import pe.idat.eduale.room.cart.CartModel
@@ -24,13 +24,14 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.content.Intent as Intent
 
-class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, onProductListener, onItemListener{
+class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onProductListener,
+    onItemListener {
 
-    private lateinit var binding:ActivityProductBinding
+    private lateinit var binding: ActivityProductBinding
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var myAdapter: ProductAdapter
     private lateinit var gridLayoutManager: GridLayoutManager
-    private lateinit var cartAdapter:CartAdapter
+    private lateinit var cartAdapter: CartAdapter
     var productsList = mutableListOf<ProductModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,15 +47,19 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
 
         binding.txtSearch.setOnQueryTextListener(this)
 
-        binding.btnShoppingCart.setOnClickListener{
+        binding.btnShoppingCart.setOnClickListener {
             startActivity(Intent(this, CartActivity::class.java))
         }
 
         getMyData()
 
-
         binding.apply {
-            toggle = ActionBarDrawerToggle(this@ProductActivity, drawerLayout, R.string.open, R.string.close)
+            toggle = ActionBarDrawerToggle(
+                this@ProductActivity,
+                drawerLayout,
+                R.string.open,
+                R.string.close
+            )
             drawerLayout.addDrawerListener(toggle)
             toggle.syncState()
 
@@ -62,16 +67,32 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
 
             navView.setNavigationItemSelectedListener {
                 when (it.itemId) {
+                    R.id.home -> {
+                        Toast.makeText(this@ProductActivity, "Home", Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.settings -> {
+                        Toast.makeText(this@ProductActivity, "Settings", Toast.LENGTH_SHORT).show()
+                    }
                     R.id.userInformation -> {
-                        Toast.makeText(this@ProductActivity, "Ejemplo 1", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ProductActivity, "Account information", Toast.LENGTH_SHORT).show()
                     }
                     R.id.clientInformation -> {
-                        val intent = Intent(this@ProductActivity, ClientInformationActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                        val value = Intent(this@ProductActivity, ClientInformationActivity::class.java)
+
+                        val objetoIntent: Intent = intent
+                        var ClienteID = objetoIntent.getStringExtra("ClienteID")
+                        var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+                        value.putExtra("ClienteID", ClienteID)
+                        value.putExtra("UsuarioID", UsuarioID)
+                        startActivity(value)
                     }
                     R.id.orderInformation -> {
-                        Toast.makeText(this@ProductActivity, "third Item Clicked", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ProductActivity, "Pedidos realizados", Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.logout -> {
+                        val logout = Intent(this@ProductActivity, LoginActivity::class.java)
+                        finish()
+                        startActivity(logout)
                     }
                 }
                 true
@@ -79,19 +100,25 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
         }
     }
 
+    //Cliente and user information
+    private fun clientInformation(){
+
+    }
+
     //Drawer menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)){
+        if (toggle.onOptionsItemSelected(item)) {
             true
         }
         return super.onOptionsItemSelected(item)
     }
 
     //Listado de productos
-    private fun getMyData(){
-        val retrofitData = RetroInstance().getRetroInstance().create(ProductRetroService::class.java)
+    private fun getMyData() {
+        val retrofitData =
+            RetroInstance().getRetroInstance().create(ProductService::class.java)
 
-        retrofitData.getProductList().enqueue(object: Callback<List<ProductModel>?> {
+        retrofitData.getProductList().enqueue(object : Callback<List<ProductModel>?> {
             override fun onResponse(
                 call: Call<List<ProductModel>?>,
                 response: Response<List<ProductModel>?>
@@ -102,24 +129,25 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
 
                 productsList.addAll(products)
 
-                myAdapter = ProductAdapter(productsList,this@ProductActivity)
+                myAdapter = ProductAdapter(productsList, this@ProductActivity)
                 myAdapter.notifyDataSetChanged()
                 binding.recyclerProducts.adapter = myAdapter
 
             }
 
             override fun onFailure(call: Call<List<ProductModel>?>, t: Throwable) {
-                Log.d("MainActivity","onFailure: "+ t.message)
+                Log.d("MainActivity", "onFailure: " + t.message)
             }
 
         })
     }
 
     //Busqueda de productos
-    private fun searchProducts(query:String){
-        val retrofitData = RetroInstance().getRetroInstance().create(ProductRetroService::class.java)
+    private fun searchProducts(query: String) {
+        val retrofitData =
+            RetroInstance().getRetroInstance().create(ProductService::class.java)
 
-        retrofitData.getProductByName(query).enqueue(object: Callback<List<ProductModel>?> {
+        retrofitData.getProductByName(query).enqueue(object : Callback<List<ProductModel>?> {
             override fun onResponse(
                 call: Call<List<ProductModel>?>,
                 response: Response<List<ProductModel>?>
@@ -130,14 +158,14 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
 
                 productsList.clear()
                 productsList.addAll(products)
-                myAdapter = ProductAdapter(productsList, this@ProductActivity )
+                myAdapter = ProductAdapter(productsList, this@ProductActivity)
                 myAdapter.notifyDataSetChanged()
                 binding.recyclerProducts.adapter = myAdapter
 
             }
 
             override fun onFailure(call: Call<List<ProductModel>?>, t: Throwable) {
-                Log.d("MainActivity","onFailure: "+ t.message)
+                Log.d("MainActivity", "onFailure: " + t.message)
             }
 
         })
@@ -145,14 +173,14 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        if(!query.isNullOrBlank()){
+        if (!query.isNullOrBlank()) {
             searchProducts(query)
         }
         return true
     }
 
     override fun onQueryTextChange(query: String?): Boolean {
-        if(query.isNullOrBlank()){
+        if (query.isNullOrBlank()) {
             productsList.clear()
             getMyData()
         }
@@ -179,7 +207,7 @@ class ProductActivity : AppCompatActivity() , SearchView.OnQueryTextListener, on
         registerItem(cart)
     }
 
-    private fun registerItem(cartModel: CartModel){
+    private fun registerItem(cartModel: CartModel) {
         doAsync {
             CartApp.database.cartDao().addItem(cartModel)
 

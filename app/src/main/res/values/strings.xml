@@ -36,6 +36,9 @@
     <string name="form_dni">DNI: </string>
     <string name="form_address">Dirección: </string>
     <string name="form_phone">Teléfono: </string>
-
-
+    <string name="logout">Cerrar sesión</string>
+    <string name="home">Home</string>
+    <string name="settings">Configuración</string>
+    <string name="information">Información</string>
+    <string name="actions">Acciones</string>
 </resources>

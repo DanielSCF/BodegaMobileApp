@@ -9,7 +9,7 @@ import pe.idat.eduale.databinding.ActivityLoginBinding
 import pe.idat.eduale.model.UserLoginRequest
 import pe.idat.eduale.model.UserResponse
 import pe.idat.eduale.network.RetroInstance
-import pe.idat.eduale.network.UserRetroService
+import pe.idat.eduale.network.UserService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
         request.clave = binding.passwordEditText.text.toString().trim()
 
         val retro = RetroInstance().getRetroClientInstance()
-            .create(UserRetroService::class.java)
+            .create(UserService::class.java)
 
         retro.login(request).enqueue(object : Callback<UserResponse> {
 
@@ -55,8 +55,12 @@ class LoginActivity : AppCompatActivity() {
                 if(user?.data=="Bienvenido")
                 {
                     Toast.makeText(this@LoginActivity, "Login Success",Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this@LoginActivity,ProductActivity::class.java))
+                    val value = Intent(this@LoginActivity,ProductActivity::class.java)
 
+                    value.putExtra("UsuarioID", user.usuario!!.usuarioID.toString())
+                    value.putExtra("ClienteID", user.usuario.cliente.clienteID.toString())
+                    startActivity(value)
+                    finish()
                 }else{
                     Toast.makeText(this@LoginActivity, "Login Failure",Toast.LENGTH_LONG).show()
                 }
@@ -68,5 +72,4 @@ class LoginActivity : AppCompatActivity() {
             }
         })
     }
-
 }

@@ -10,7 +10,7 @@ import pe.idat.eduale.model.ClientModel
 import pe.idat.eduale.model.UserAccessModel
 import pe.idat.eduale.model.UserModel
 import pe.idat.eduale.network.RetroInstance
-import pe.idat.eduale.network.UserRetroService
+import pe.idat.eduale.network.UserService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,7 +69,7 @@ class RegisterUserActivity: AppCompatActivity() {
         )
 
 
-        val retro= RetroInstance().getRetroClientInstance().create(UserRetroService::class.java)
+        val retro= RetroInstance().getRetroClientInstance().create(UserService::class.java)
         retro.guardarusuario(request).enqueue(object : Callback<UserModel> {
 
             override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {

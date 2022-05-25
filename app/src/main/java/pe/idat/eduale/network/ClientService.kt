@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-interface ClientRetroService {
+interface ClientService {
     @GET("cliente/{id}")
     fun buscarcliente(@Path("id") id:Int): Call<ClientModel>
 

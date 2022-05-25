@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import pe.idat.eduale.databinding.ActivityClientEditBinding
 import pe.idat.eduale.model.ClientModel
-import pe.idat.eduale.network.ClientRetroService
+import pe.idat.eduale.network.ClientService
 import pe.idat.eduale.network.RetroInstance
 import retrofit2.Call
 import retrofit2.Callback
@@ -58,7 +58,7 @@ class ClientEditActivity : AppCompatActivity() {
                 telefono = binding.txtTelefonoPerfil.text.toString().trim()
             )
 
-            val retro = RetroInstance().getRetroClientInstance().create(ClientRetroService::class.java)
+            val retro = RetroInstance().getRetroClientInstance().create(ClientService::class.java)
             retro.editarcliente(request).enqueue(object : Callback<ClientModel> {
                 override fun onResponse(
                     call: Call<ClientModel>,
