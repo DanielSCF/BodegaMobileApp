@@ -15,6 +15,9 @@
         android:theme="@style/Theme.EdualeMobileApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ClientEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".ClientInformationActivity"
             android:exported="false" />
         <activity
@@ -25,8 +28,8 @@
             android:exported="false" />
         <activity
             android:name=".ProductActivity"
-            android:theme="@style/GeneralActionBar"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/GeneralActionBar" />
         <activity
             android:name=".LoginActivity"
             android:exported="false" />

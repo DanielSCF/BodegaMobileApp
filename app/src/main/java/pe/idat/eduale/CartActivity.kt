@@ -81,8 +81,11 @@ class CartActivity : AppCompatActivity(), onItemListener {
     override fun onDeleteClick(position: Int) {
         val item = itemList.get(position)
         deleteItem(item)
-        startActivity(Intent(this, CartActivity::class.java))
+
         finish()
+        overridePendingTransition(0,0)
+        startActivity(Intent(this, CartActivity::class.java))
+        overridePendingTransition(0,0)
     }
 
 }

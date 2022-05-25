@@ -28,4 +28,15 @@
     <string name="welcome">Bienvenido</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="back">Volver</string>
+    <string name="edit_information">Editar información</string>
+    <string name="user_img">Imagen de usuario</string>
+    <string name="form_names">Nombres: </string>
+    <string name="form_lastnames">Apellidos: </string>
+    <string name="form_dni">DNI: </string>
+    <string name="form_address">Dirección: </string>
+    <string name="form_phone">Teléfono: </string>
+
+
+
 </resources>
