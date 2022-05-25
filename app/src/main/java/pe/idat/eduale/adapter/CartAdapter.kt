@@ -41,4 +41,10 @@ class CartAdapter (var itemList:MutableList<CartModel>, private val onItemListen
             notifyDataSetChanged()
         }
     }
+
+    fun clearCart(){
+        itemList.clear()
+        notifyDataSetChanged()
+    }
+
 }

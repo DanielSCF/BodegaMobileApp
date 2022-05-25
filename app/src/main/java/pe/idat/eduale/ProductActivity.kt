@@ -82,9 +82,11 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onP
                     R.id.settings -> {
                         Toast.makeText(this@ProductActivity, "Settings", Toast.LENGTH_SHORT).show()
                     }
+                    /*
                     R.id.userInformation -> {
                         Toast.makeText(this@ProductActivity, "Account information", Toast.LENGTH_SHORT).show()
                     }
+                     */
                     R.id.clientInformation -> {
                         val value = Intent(this@ProductActivity, ClientInformationActivity::class.java)
 

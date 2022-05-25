@@ -19,4 +19,7 @@ interface CartDao {
     @Update
     fun editItem(cartModel: CartModel)
 
+    @Query("DELETE FROM CartModel")
+    fun clearCart()
+
 }

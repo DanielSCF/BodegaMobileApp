@@ -80,7 +80,7 @@
             android:layout_marginStart="10dp"
             android:textSize="20sp"
             android:textStyle="bold"
-            tools:text="Total: S/." />
+            android:text="Total: S/." />
 
         <TextView
             android:id="@+id/txtTotalValue"

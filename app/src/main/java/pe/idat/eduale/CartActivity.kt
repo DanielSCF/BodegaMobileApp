@@ -101,6 +101,17 @@ class CartActivity : AppCompatActivity(), onItemListener {
         }
     }
 
+    //Eliminar todos los elementos del carrito
+    private fun clearCart(){
+        doAsync {
+            CartApp.database.cartDao().clearCart()
+            uiThread {
+                itemList.clear()
+                cartAdapter.clearCart()
+            }
+        }
+    }
+
     override fun onDeleteClick(position: Int) {
         val item = itemList.get(position)
         deleteItem(item)
@@ -125,7 +136,7 @@ class CartActivity : AppCompatActivity(), onItemListener {
         val objetoIntent: Intent = intent
         var ClienteID = objetoIntent.getStringExtra("ClienteID").toString().toInt()
 
-        val total = binding.txtTotalValue.toString().toDouble()
+        val total = itemList.sumOf { it.subtotal }
 
         val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         val currentDate = sdf.format(Date())
@@ -139,48 +150,87 @@ class CartActivity : AppCompatActivity(), onItemListener {
             trabajador = null
         )
 
-
         val retro = RetroInstance().getRetroInstance().create(OrderService::class.java)
         retro.guardarpedido(request).enqueue(object : Callback<OrderModel> {
             override fun onResponse(call: Call<OrderModel>, response: Response<OrderModel>) {
                 val user = response.body()
 
+                for (item in itemList) {
+                    val requests = OrderDetailModel(
+                        pedido = OrderModel(
+                            user?.pedidoID.toString().toInt(),
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                        ),
+                        cantidad = item.cantidad,
+                        precio_venta = item.precio,
+                        producto = ProductModel(
+                            item.productId,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                        ),
+                        subtotal = item.subtotal
+                    )
+
+                    val retro1 = RetroInstance().getRetroClientInstance()
+                        .create(OrderDetailService::class.java)
+
+                    retro1.registrarPedido(requests)
+                        .enqueue(object : Callback<OrderDetailModel> {
+                            override fun onResponse(
+                                call: Call<OrderDetailModel>,
+                                response: Response<OrderDetailModel>
+                            ) {
+                                if (response.isSuccessful) {
+                                    itemList.clear()
+
+                                    val objetoIntent: Intent = intent
+                                    var ClienteID = objetoIntent.getStringExtra("ClienteID")
+                                    var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+
+                                    val value = Intent(this@CartActivity, ProductActivity::class.java)
+                                    value.putExtra("ClienteID", ClienteID)
+                                    value.putExtra("UsuarioID", UsuarioID)
+                                    startActivity(value)
 
 
-                //AQUI SE REQUIERE UN REPETIDOR PARA GUARDAR LOS PRODUCTOS :V
-                val request1 = OrderDetailModel(
-                    pedido = OrderModel(user?.pedidoID.toString().toInt(), null, null, null, null, null),
-                    cantidad = 2,
-                    precio_venta = 2.0,
-                    producto = ProductModel(2, null, null, null, null, null, null, null, null, null , null),
-                    subtotal = 4.0
-                )
-                val retro1 = RetroInstance().getRetroClientInstance().create(OrderDetailService::class.java)
-
-                retro1.registrarPedido(request1)
-                    .enqueue(object : Callback<OrderDetailModel> {
-                        override fun onResponse(
-                            call: Call<OrderDetailModel>,
-                            response: Response<OrderDetailModel>
-                        ) {
-                            if (response.isSuccessful) {
-                                Toast.makeText(this@CartActivity, "Pedido registrado", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this@CartActivity,
+                                        "Pedido registrado",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                        }
 
-                        override fun onFailure(
-                            call: Call<OrderDetailModel>,
-                            t: Throwable
-                        ) {
-                            Toast.makeText(this@CartActivity, "Error al registrar pedido", Toast.LENGTH_SHORT).show()
-                        }
+                            override fun onFailure(
+                                call: Call<OrderDetailModel>,
+                                t: Throwable
+                            ) {
+                                Toast.makeText(
+                                    this@CartActivity,
+                                    "Error al registrar pedido",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
 
-                    })
-                //Hasta aqui :v
-
+                        })
+                }
             }
+
             override fun onFailure(call: Call<OrderModel>, t: Throwable) {
-                Toast.makeText(this@CartActivity, "Error al registrar pedido", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CartActivity, "Error al registrar pedido", Toast.LENGTH_SHORT)
+                    .show()
             }
         })
     }

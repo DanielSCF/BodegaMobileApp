@@ -12,10 +12,12 @@
 
     <item android:title="@string/information">
         <menu>
+            <!---
             <item
                 android:id="@+id/userInformation"
                 android:title="@string/user_information"
                 android:icon="@drawable/ic_account_information"/>
+                -->
             <item
                 android:id="@+id/clientInformation"
                 android:title="@string/client_information"
