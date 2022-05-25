@@ -193,7 +193,6 @@ class CartActivity : AppCompatActivity(), onItemListener {
                                 response: Response<OrderDetailModel>
                             ) {
                                 if (response.isSuccessful) {
-                                    itemList.clear()
 
                                     val objetoIntent: Intent = intent
                                     var ClienteID = objetoIntent.getStringExtra("ClienteID")
@@ -204,6 +203,7 @@ class CartActivity : AppCompatActivity(), onItemListener {
                                     value.putExtra("UsuarioID", UsuarioID)
                                     startActivity(value)
 
+                                    clearCart()
 
                                     Toast.makeText(
                                         this@CartActivity,
