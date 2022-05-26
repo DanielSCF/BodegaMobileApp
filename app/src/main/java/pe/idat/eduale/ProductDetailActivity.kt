@@ -27,8 +27,10 @@ class ProductDetailActivity : AppCompatActivity(), onItemListener {
 
         initValues()
         quantity()
-        addToCart()
 
+        binding.btnMakeOrder.setOnClickListener {
+            addToCart()
+        }
         binding.btnBack.setOnClickListener {
             val objetoIntent: Intent = intent
             var ClienteID = objetoIntent.getStringExtra("ClienteID")
@@ -41,6 +43,7 @@ class ProductDetailActivity : AppCompatActivity(), onItemListener {
         }
     }
 
+    //Inicializar valores de producto en la vista
     private fun initValues() {
         val objetoIntent: Intent = intent
 
@@ -57,6 +60,7 @@ class ProductDetailActivity : AppCompatActivity(), onItemListener {
 
     }
 
+    //Sumar o restar valores de cantidad
     private fun quantity() {
         var value = binding.txtCantidad.text.toString().toInt()
         binding.btnAdd.setOnClickListener {
@@ -71,26 +75,25 @@ class ProductDetailActivity : AppCompatActivity(), onItemListener {
         }
     }
 
+    //Registrar producto y llevarlo al carrito
     private fun addToCart() {
-        binding.btnMakeOrder.setOnClickListener {
-            val objetoIntent: Intent = intent
+        val objetoIntent: Intent = intent
 
-            val cantidad = binding.txtCantidad.text.toString().toInt()
-            val precio = objetoIntent.getStringExtra("precio").toString().toDouble()
-            val subtotal = cantidad * precio
+        val cantidad = binding.txtCantidad.text.toString().toInt()
+        val precio = objetoIntent.getStringExtra("precio").toString().toDouble()
+        val subtotal = cantidad * precio
 
-            val cart = CartModel(
-                nombre = objetoIntent.getStringExtra("nombreDesc").toString(),
-                precio = precio,
-                cantidad = cantidad,
-                imagen = objetoIntent.getStringExtra("imagen").toString(),
-                subtotal = subtotal,
-                productId = objetoIntent.getStringExtra("productoid").toString().toInt()
-            )
-            registerItem(cart)
+        val cart = CartModel(
+            nombre = objetoIntent.getStringExtra("nombreDesc").toString(),
+            precio = precio,
+            cantidad = cantidad,
+            imagen = objetoIntent.getStringExtra("imagen").toString(),
+            subtotal = subtotal,
+            productId = objetoIntent.getStringExtra("productoid").toString().toInt()
+        )
+        registerItem(cart)
 
-            Toast.makeText(this, "Añadido al carrito", Toast.LENGTH_SHORT).show()
-        }
+        Toast.makeText(this, "Añadido al carrito", Toast.LENGTH_SHORT).show()
     }
 
     private fun registerItem(cartModel: CartModel) {

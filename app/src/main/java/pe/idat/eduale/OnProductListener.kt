@@ -1,6 +1,6 @@
 package pe.idat.eduale
 
-interface onProductListener {
+interface OnProductListener {
     fun onProductButtonClick(position:Int)
     fun onProductClick(position: Int)
 }

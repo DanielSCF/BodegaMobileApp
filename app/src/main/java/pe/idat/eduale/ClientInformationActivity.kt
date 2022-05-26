@@ -21,14 +21,7 @@ class ClientInformationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnBack.setOnClickListener{
-            val objetoIntent: Intent = intent
-            var ClienteID = objetoIntent.getStringExtra("ClienteID")
-            var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
-
-            var value = Intent(this, ProductActivity::class.java)
-            value.putExtra("ClienteID", ClienteID)
-            value.putExtra("UsuarioID", UsuarioID)
-            startActivity(value)
+            sendAppDataProduct()
         }
 
         buscarporid()
@@ -36,7 +29,7 @@ class ClientInformationActivity : AppCompatActivity() {
 
     private fun buscarporid() {
         val objetoIntent: Intent = intent
-        var ClienteID = objetoIntent.getStringExtra("ClienteID")
+        val ClienteID = objetoIntent.getStringExtra("ClienteID")
 
         val retro = RetroInstance().getRetroClientInstance().create(ClientService::class.java)
         retro.buscarcliente("$ClienteID".toInt()).enqueue(object : Callback<ClientModel> {
@@ -75,5 +68,17 @@ class ClientInformationActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    //Enviar información del cliente a página de productos
+    private fun sendAppDataProduct(){
+        val objetoIntent: Intent = intent
+        val ClienteID = objetoIntent.getStringExtra("ClienteID")
+        val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+
+        val value = Intent(this, ProductActivity::class.java)
+        value.putExtra("ClienteID", ClienteID)
+        value.putExtra("UsuarioID", UsuarioID)
+        startActivity(value)
     }
 }

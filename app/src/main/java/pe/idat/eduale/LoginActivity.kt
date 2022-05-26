@@ -16,28 +16,29 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityLoginBinding
+    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initAction()
-    }
-
-    fun initAction(){
-        binding.loginButton.setOnClickListener{
-
-            if(TextUtils.isEmpty(binding.usernameEditText.text.toString()) || TextUtils.isEmpty(binding.passwordEditText.text.toString())) {
-                Toast.makeText(this, "Username Requerido", Toast.LENGTH_LONG).show()
-            } else {
-                login()
-            }
+        binding.loginButton.setOnClickListener {
+            validateTextbox()
         }
     }
 
-    fun login(){
+    //Validar si usuario y contraseña están vacíos
+    private fun validateTextbox() {
+        if (TextUtils.isEmpty(binding.usernameEditText.text.toString()) || TextUtils.isEmpty(binding.passwordEditText.text.toString())) {
+            Toast.makeText(this, "Username Requerido", Toast.LENGTH_LONG).show()
+        } else {
+            login()
+        }
+    }
+
+    //Validar existencia de usuario e iniciar sesión
+    private fun login() {
         val request = UserLoginRequest()
 
         request.nickname = binding.usernameEditText.text.toString().trim()
@@ -45,30 +46,29 @@ class LoginActivity : AppCompatActivity() {
 
         val retro = RetroInstance().getRetroClientInstance()
             .create(UserService::class.java)
-
         retro.login(request).enqueue(object : Callback<UserResponse> {
-
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                val user = response.body()
+                if (user?.data == "Bienvenido") {
+                    Toast.makeText(this@LoginActivity, "Bienvenido", Toast.LENGTH_SHORT).show()
 
-                val user=response.body()
-
-                if(user?.data=="Bienvenido")
-                {
-                    Toast.makeText(this@LoginActivity, "Login Success",Toast.LENGTH_LONG).show()
-                    val value = Intent(this@LoginActivity,ProductActivity::class.java)
-
+                    //Enviar la id de usuario y cliente a la página de inicio
+                    val value = Intent(this@LoginActivity, ProductActivity::class.java)
                     value.putExtra("UsuarioID", user.usuario!!.usuarioID.toString())
                     value.putExtra("ClienteID", user.usuario.cliente.clienteID.toString())
                     startActivity(value)
+
                     finish()
-                }else{
-                    Toast.makeText(this@LoginActivity, "Login Failure",Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this@LoginActivity, "Inicio de sesión fallido", Toast.LENGTH_SHORT).show()
                 }
-
             }
-
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                Toast.makeText(this@LoginActivity, "Throwable"+t.localizedMessage,Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Throwable" + t.localizedMessage,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }

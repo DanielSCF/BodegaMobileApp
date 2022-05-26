@@ -5,19 +5,14 @@
         android:id="@+id/home"
         android:title="@string/home"
         android:icon="@drawable/ic_home"/>
-    <item
-        android:id="@+id/settings"
-        android:title="@string/settings"
-        android:icon="@drawable/ic_settings"/>
 
     <item android:title="@string/information">
         <menu>
-            <!---
             <item
                 android:id="@+id/userInformation"
                 android:title="@string/user_information"
                 android:icon="@drawable/ic_account_information"/>
-                -->
+
             <item
                 android:id="@+id/clientInformation"
                 android:title="@string/client_information"

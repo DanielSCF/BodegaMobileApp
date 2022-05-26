@@ -24,7 +24,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.content.Intent as Intent
 
-class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onProductListener,
+class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, OnProductListener,
     onItemListener {
 
     private lateinit var binding: ActivityProductBinding
@@ -47,7 +47,7 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onP
 
         binding.txtSearch.setOnQueryTextListener(this)
 
-        //Shopping cart
+        //Enviar datos de cliente y usuario a carrito
         binding.btnShoppingCart.setOnClickListener {
             val value = Intent(this, CartActivity::class.java)
 
@@ -79,14 +79,9 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onP
                     R.id.home -> {
                         Toast.makeText(this@ProductActivity, "Home", Toast.LENGTH_SHORT).show()
                     }
-                    R.id.settings -> {
-                        Toast.makeText(this@ProductActivity, "Settings", Toast.LENGTH_SHORT).show()
-                    }
-                    /*
                     R.id.userInformation -> {
                         Toast.makeText(this@ProductActivity, "Account information", Toast.LENGTH_SHORT).show()
                     }
-                     */
                     R.id.clientInformation -> {
                         val value = Intent(this@ProductActivity, ClientInformationActivity::class.java)
 
@@ -140,7 +135,6 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onP
                 binding.recyclerProducts.adapter = myAdapter
 
             }
-
             override fun onFailure(call: Call<List<ProductModel>?>, t: Throwable) {
                 Log.d("MainActivity", "onFailure: " + t.message)
             }
@@ -148,7 +142,7 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, onP
         })
     }
 
-    //Busqueda de productos
+    //Búsqueda de productos
     private fun searchProducts(query: String) {
         val retrofitData =
             RetroInstance().getRetroInstance().create(ProductService::class.java)

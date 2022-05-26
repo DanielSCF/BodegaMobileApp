@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pe.idat.eduale.R
 import pe.idat.eduale.model.ProductModel
-import pe.idat.eduale.onProductListener
+import pe.idat.eduale.OnProductListener
 
 class ProductAdapter(
     val productList: List<ProductModel>,
-    private val onProductListener: onProductListener
+    private val OnProductListener: OnProductListener
 ) : RecyclerView.Adapter<ProductViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -22,11 +22,11 @@ class ProductAdapter(
         holder.render(item)
 
         holder.addButton.setOnClickListener {
-            onProductListener.onProductButtonClick(position)
+            OnProductListener.onProductButtonClick(position)
         }
 
         holder.productCard.setOnClickListener {
-            onProductListener.onProductClick(position)
+            OnProductListener.onProductClick(position)
         }
 
     }

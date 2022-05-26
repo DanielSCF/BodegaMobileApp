@@ -37,24 +37,18 @@ class CartActivity : AppCompatActivity(), onItemListener {
         binding = ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnBack.setOnClickListener {
-            val objetoIntent: Intent = intent
-            var ClienteID = objetoIntent.getStringExtra("ClienteID")
-            var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
-
-            val value = Intent(this, ProductActivity::class.java)
-            value.putExtra("ClienteID", ClienteID)
-            value.putExtra("UsuarioID", UsuarioID)
-            startActivity(value)
-        }
-
         setCartRecyclerView()
+
+        binding.btnBack.setOnClickListener {
+            sendAppDataProduct()
+        }
 
         binding.btnRealizarPedido.setOnClickListener {
             registerOrder()
         }
     }
 
+    //Items del carrito
     private fun setCartRecyclerView() {
         cartAdapter = CartAdapter(mutableListOf(), this@CartActivity)
         mGridLayout = GridLayoutManager(this, 1)
@@ -69,6 +63,7 @@ class CartActivity : AppCompatActivity(), onItemListener {
         }
     }
 
+    //Listar elementos en el carrito
     private fun getCartList() {
         doAsync {
             val items = CartApp.database.cartDao().cartList()
@@ -79,6 +74,7 @@ class CartActivity : AppCompatActivity(), onItemListener {
         }
     }
 
+    //Calcular el total
     private fun setTotal() {
         doAsync {
             val items = CartApp.database.cartDao().cartList()
@@ -112,29 +108,21 @@ class CartActivity : AppCompatActivity(), onItemListener {
         }
     }
 
+    //Eliminar elemento del carrito
     override fun onDeleteClick(position: Int) {
         val item = itemList.get(position)
         deleteItem(item)
 
         finish()
         overridePendingTransition(0, 0)
-
-        val objetoIntent: Intent = intent
-        var ClienteID = objetoIntent.getStringExtra("ClienteID")
-        var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
-
-        val value = Intent(this, CartActivity::class.java)
-        value.putExtra("ClienteID", ClienteID)
-        value.putExtra("UsuarioID", UsuarioID)
-        startActivity(value)
-
+        sendAppDataSelf()
         overridePendingTransition(0, 0)
     }
 
-    //Make order
+    //Registro de pedido y los detalles del pedido
     private fun registerOrder() {
         val objetoIntent: Intent = intent
-        var ClienteID = objetoIntent.getStringExtra("ClienteID").toString().toInt()
+        val ClienteID = objetoIntent.getStringExtra("ClienteID").toString().toInt()
 
         val total = itemList.sumOf { it.subtotal }
 
@@ -155,7 +143,7 @@ class CartActivity : AppCompatActivity(), onItemListener {
             override fun onResponse(call: Call<OrderModel>, response: Response<OrderModel>) {
                 val user = response.body()
 
-                for (item in itemList) {
+                itemList.map{ item ->
                     val requests = OrderDetailModel(
                         pedido = OrderModel(
                             user?.pedidoID.toString().toInt(),
@@ -193,18 +181,8 @@ class CartActivity : AppCompatActivity(), onItemListener {
                                 response: Response<OrderDetailModel>
                             ) {
                                 if (response.isSuccessful) {
-
-                                    val objetoIntent: Intent = intent
-                                    var ClienteID = objetoIntent.getStringExtra("ClienteID")
-                                    var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
-
-                                    val value = Intent(this@CartActivity, ProductActivity::class.java)
-                                    value.putExtra("ClienteID", ClienteID)
-                                    value.putExtra("UsuarioID", UsuarioID)
-                                    startActivity(value)
-
+                                    sendAppDataProduct()
                                     clearCart()
-
                                     Toast.makeText(
                                         this@CartActivity,
                                         "Pedido registrado",
@@ -223,15 +201,36 @@ class CartActivity : AppCompatActivity(), onItemListener {
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
-
                         })
                 }
             }
-
             override fun onFailure(call: Call<OrderModel>, t: Throwable) {
                 Toast.makeText(this@CartActivity, "Error al registrar pedido", Toast.LENGTH_SHORT)
                     .show()
             }
         })
+    }
+
+    //Recibir y enviar información
+    private fun sendAppDataSelf(){
+        val objetoIntent: Intent = intent
+        val ClienteID = objetoIntent.getStringExtra("ClienteID")
+        val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+
+        val value = Intent(this, CartActivity::class.java)
+        value.putExtra("ClienteID", ClienteID)
+        value.putExtra("UsuarioID", UsuarioID)
+        startActivity(value)
+    }
+
+    private fun sendAppDataProduct(){
+        val objetoIntent: Intent = intent
+        val ClienteID = objetoIntent.getStringExtra("ClienteID")
+        val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+
+        val value = Intent(this, ProductActivity::class.java)
+        value.putExtra("ClienteID", ClienteID)
+        value.putExtra("UsuarioID", UsuarioID)
+        startActivity(value)
     }
 }
