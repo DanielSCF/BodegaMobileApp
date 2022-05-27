@@ -18,14 +18,14 @@ import pe.idat.eduale.network.OrderService
 import pe.idat.eduale.network.RetroInstance
 import pe.idat.eduale.room.cart.CartApp
 import pe.idat.eduale.room.cart.CartModel
-import pe.idat.eduale.room.cart.onItemListener
+import pe.idat.eduale.room.cart.OnItemListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CartActivity : AppCompatActivity(), onItemListener {
+class CartActivity : AppCompatActivity(), OnItemListener {
 
     private lateinit var binding: ActivityCartBinding
     private lateinit var cartAdapter: CartAdapter
@@ -97,6 +97,16 @@ class CartActivity : AppCompatActivity(), onItemListener {
         }
     }
 
+    override fun onDeleteClick(position: Int) {
+        val item = itemList.get(position)
+        deleteItem(item)
+
+        finish()
+        overridePendingTransition(0, 0)
+        sendAppDataSelf()
+        overridePendingTransition(0, 0)
+    }
+
     //Eliminar todos los elementos del carrito
     private fun clearCart(){
         doAsync {
@@ -108,15 +118,58 @@ class CartActivity : AppCompatActivity(), onItemListener {
         }
     }
 
-    //Eliminar elemento del carrito
-    override fun onDeleteClick(position: Int) {
-        val item = itemList.get(position)
-        deleteItem(item)
+    //Ajustar subtotal
+    private fun newSubtotal(cartModel: CartModel, cantidad: Int, operation:String){
+        if(operation == "Suma")
+            itemList.find { item -> item == cartModel }?.cantidad = cantidad + 1
+        else
+            itemList.find{ item -> item == cartModel}?.cantidad = cantidad - 1
 
-        finish()
-        overridePendingTransition(0, 0)
-        sendAppDataSelf()
-        overridePendingTransition(0, 0)
+        val cantidad = itemList.find { item -> item == cartModel }?.cantidad
+        val precio = itemList.find { item -> item == cartModel }?.precio
+
+        itemList.find {item -> item == cartModel }?.subtotal = cantidad!! * precio!!
+    }
+
+    //Añadir elemento
+    private fun addOneItem(cartModel: CartModel, cantidad:Int){
+        doAsync {
+            CartApp.database.cartDao().editItem(cartModel)
+            uiThread {
+                newSubtotal(cartModel, cantidad, "Suma")
+                cartAdapter.sumOneItem(cartModel, cantidad)
+            }
+        }
+    }
+
+    override fun onAddClick(position: Int) {
+        val item = itemList.get(position)
+        val cantidad = item.cantidad
+        val stock = item.stock
+
+        if(stock > cantidad)
+            addOneItem(item, cantidad)
+        setTotal()
+    }
+
+    //Restar elemento
+    private fun subtractOneItem(cartModel: CartModel, cantidad:Int){
+        doAsync {
+            CartApp.database.cartDao().editItem(cartModel)
+            uiThread {
+                newSubtotal(cartModel, cantidad, "Resta")
+                cartAdapter.subtractOneItem(cartModel, cantidad)
+            }
+        }
+    }
+
+    override fun onSubtractClick(position: Int) {
+        val item = itemList.get(position)
+        val cantidad = item.cantidad
+
+        if(cantidad > 1)
+            subtractOneItem(item, cantidad)
+        setTotal()
     }
 
     //Registro de pedido y los detalles del pedido

@@ -9,14 +9,17 @@
     >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         >
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/retroceder"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/atras"
+            android:backgroundTint="@color/azul"
             app:strokeColor="@color/white" />
 
         <TextView
@@ -87,13 +90,18 @@
             android:backgroundTint="@color/azul"
             app:cornerRadius="20dp"
             />
-        <TextView
-            android:layout_width="wrap_content"
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnRegisterAccount"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="¿Has olvidado la Contraseña? Entra Aqui"
+            android:shadowColor="@color/white"
+            android:text="@string/create_account"
+            style="?android:attr/borderlessButtonStyle"
+            android:textAllCaps="false"
+            android:textColor="@color/grey"
             />
     </LinearLayout>
 </LinearLayout>

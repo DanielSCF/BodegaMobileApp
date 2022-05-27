@@ -24,7 +24,6 @@ class ProductAdapter(
         holder.addButton.setOnClickListener {
             OnProductListener.onProductButtonClick(position)
         }
-
         holder.productCard.setOnClickListener {
             OnProductListener.onProductClick(position)
         }

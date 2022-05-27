@@ -11,9 +11,9 @@ import pe.idat.eduale.adapter.CartAdapter
 import pe.idat.eduale.databinding.ActivityProductDetailBinding
 import pe.idat.eduale.room.cart.CartApp
 import pe.idat.eduale.room.cart.CartModel
-import pe.idat.eduale.room.cart.onItemListener
+import pe.idat.eduale.room.cart.OnItemListener
 
-class ProductDetailActivity : AppCompatActivity(), onItemListener {
+class ProductDetailActivity : AppCompatActivity(), OnItemListener {
 
     private lateinit var binding: ActivityProductDetailBinding
     private lateinit var cartAdapter: CartAdapter
@@ -33,8 +33,8 @@ class ProductDetailActivity : AppCompatActivity(), onItemListener {
         }
         binding.btnBack.setOnClickListener {
             val objetoIntent: Intent = intent
-            var ClienteID = objetoIntent.getStringExtra("ClienteID")
-            var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+            val ClienteID = objetoIntent.getStringExtra("ClienteID")
+            val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
 
             val value = Intent(this, ProductActivity::class.java)
             value.putExtra("ClienteID", ClienteID)
@@ -81,17 +81,24 @@ class ProductDetailActivity : AppCompatActivity(), onItemListener {
 
         val cantidad = binding.txtCantidad.text.toString().toInt()
         val precio = objetoIntent.getStringExtra("precio").toString().toDouble()
+        val stock = objetoIntent.getStringExtra("stock").toString().toInt()
         val subtotal = cantidad * precio
 
         val cart = CartModel(
             nombre = objetoIntent.getStringExtra("nombreDesc").toString(),
+            marca = objetoIntent.getStringExtra("marca").toString(),
             precio = precio,
             cantidad = cantidad,
+            stock = objetoIntent.getStringExtra("stock").toString().toInt(),
             imagen = objetoIntent.getStringExtra("imagen").toString(),
             subtotal = subtotal,
             productId = objetoIntent.getStringExtra("productoid").toString().toInt()
         )
-        registerItem(cart)
+
+        if(stock >= cantidad)
+            registerItem(cart)
+        else
+            Toast.makeText(this, "Cantidad mayor a stock del producto", Toast.LENGTH_SHORT).show()
 
         Toast.makeText(this, "Añadido al carrito", Toast.LENGTH_SHORT).show()
     }
@@ -107,6 +114,14 @@ class ProductDetailActivity : AppCompatActivity(), onItemListener {
     }
 
     override fun onDeleteClick(position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAddClick(position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSubtractClick(position: Int) {
         TODO("Not yet implemented")
     }
 }

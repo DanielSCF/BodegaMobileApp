@@ -8,9 +8,11 @@ data class CartModel(
     @PrimaryKey(autoGenerate = true)
     val id:Int=0,
     val nombre:String,
+    val marca: String,
     val precio:Double,
-    val cantidad:Int,
+    var cantidad:Int,
+    val stock: Int,
     val imagen:String,
-    val subtotal:Double,
+    var subtotal:Double,
     val productId: Int
 )

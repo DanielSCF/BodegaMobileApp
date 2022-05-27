@@ -42,4 +42,10 @@
     <string name="information">Información</string>
     <string name="actions">Acciones</string>
     <string name="details">Detalles: </string>
+    <string name="change_password">Cambiar contraseña</string>
+    <string name="nickname">Nickname</string>
+    <string name="password">Contraseña</string>
+    <string name="new_password">Nueva contraseña</string>
+    <string name="confirm_password">Confirmar contraseña</string>
+    <string name="create_account">¿No se ha registrado? Entra aquí</string>
 </resources>

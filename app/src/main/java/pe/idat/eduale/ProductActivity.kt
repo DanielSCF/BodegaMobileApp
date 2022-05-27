@@ -18,14 +18,14 @@ import pe.idat.eduale.network.ProductService
 import pe.idat.eduale.network.RetroInstance
 import pe.idat.eduale.room.cart.CartApp
 import pe.idat.eduale.room.cart.CartModel
-import pe.idat.eduale.room.cart.onItemListener
+import pe.idat.eduale.room.cart.OnItemListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.content.Intent as Intent
 
 class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, OnProductListener,
-    onItemListener {
+    OnItemListener {
 
     private lateinit var binding: ActivityProductBinding
     private lateinit var toggle: ActionBarDrawerToggle
@@ -52,8 +52,8 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, OnP
             val value = Intent(this, CartActivity::class.java)
 
             val objetoIntent: Intent = intent
-            var ClienteID = objetoIntent.getStringExtra("ClienteID")
-            var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+            val ClienteID = objetoIntent.getStringExtra("ClienteID")
+            val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
             value.putExtra("ClienteID", ClienteID)
             value.putExtra("UsuarioID", UsuarioID)
             startActivity(value)
@@ -80,14 +80,21 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, OnP
                         Toast.makeText(this@ProductActivity, "Home", Toast.LENGTH_SHORT).show()
                     }
                     R.id.userInformation -> {
-                        Toast.makeText(this@ProductActivity, "Account information", Toast.LENGTH_SHORT).show()
+                        val value = Intent(this@ProductActivity, UserEditPasswordActivity::class.java)
+
+                        val objetoIntent: Intent = intent
+                        val ClienteID = objetoIntent.getStringExtra("ClienteID")
+                        val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+                        value.putExtra("ClienteID", ClienteID)
+                        value.putExtra("UsuarioID", UsuarioID)
+                        startActivity(value)
                     }
                     R.id.clientInformation -> {
                         val value = Intent(this@ProductActivity, ClientInformationActivity::class.java)
 
                         val objetoIntent: Intent = intent
-                        var ClienteID = objetoIntent.getStringExtra("ClienteID")
-                        var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+                        val ClienteID = objetoIntent.getStringExtra("ClienteID")
+                        val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
                         value.putExtra("ClienteID", ClienteID)
                         value.putExtra("UsuarioID", UsuarioID)
                         startActivity(value)
@@ -198,8 +205,10 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, OnP
 
         val cart = CartModel(
             nombre = product.nombre + " - " + product.descripcion,
+            marca = product.marca!!.nombre!!,
             precio = precio,
             cantidad = cantidad,
+            stock = product.stock!!,
             imagen = product.imagen!!,
             subtotal = subtotal,
             productId = product.productoid!!
@@ -225,14 +234,15 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, OnP
         val value = Intent(this,ProductDetailActivity::class.java)
 
         val objetoIntent: Intent = intent
-        var ClienteID = objetoIntent.getStringExtra("ClienteID")
-        var UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+        val ClienteID = objetoIntent.getStringExtra("ClienteID")
+        val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
 
         value.putExtra("ClienteID", ClienteID)
         value.putExtra("UsuarioID", UsuarioID)
 
         value.putExtra("productoid", product.productoid.toString())
         value.putExtra("nombreDesc", product.nombre + " " + product.descripcion)
+        value.putExtra("marca", product.marca!!.nombre!!)
         value.putExtra("precio", product.precioventa.toString())
         value.putExtra("stock", product.stock.toString())
         value.putExtra("imagen", product.imagen)
@@ -242,7 +252,16 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, OnP
         startActivity(value)
     }
 
+    //Init cart view
     override fun onDeleteClick(position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAddClick(position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSubtractClick(position: Int) {
         TODO("Not yet implemented")
     }
 }

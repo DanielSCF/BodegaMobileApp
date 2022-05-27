@@ -26,6 +26,14 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener {
             validateTextbox()
         }
+
+        binding.btnRegisterAccount.setOnClickListener {
+            startActivity(Intent(this, RegisterUserActivity::class.java))
+        }
+
+        binding.btnBack.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     //Validar si usuario y contraseña están vacíos
