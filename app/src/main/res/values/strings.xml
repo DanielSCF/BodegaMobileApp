@@ -48,4 +48,7 @@
     <string name="new_password">Nueva contraseña</string>
     <string name="confirm_password">Confirmar contraseña</string>
     <string name="create_account">¿No se ha registrado? Entra aquí</string>
+
+    <string name="order_history">Historial de pedidos</string>
+    <string name="orders">Pedidos</string>
 </resources>

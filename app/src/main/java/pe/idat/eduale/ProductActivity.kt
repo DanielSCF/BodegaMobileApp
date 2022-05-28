@@ -100,7 +100,14 @@ class ProductActivity : AppCompatActivity(), SearchView.OnQueryTextListener, OnP
                         startActivity(value)
                     }
                     R.id.orderInformation -> {
-                        Toast.makeText(this@ProductActivity, "Pedidos realizados", Toast.LENGTH_SHORT).show()
+                        val value = Intent(this@ProductActivity, OrderPendientActivity::class.java)
+
+                        val objetoIntent: Intent = intent
+                        val ClienteID = objetoIntent.getStringExtra("ClienteID")
+                        val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+                        value.putExtra("ClienteID", ClienteID)
+                        value.putExtra("UsuarioID", UsuarioID)
+                        startActivity(value)
                     }
                     R.id.logout -> {
                         val logout = Intent(this@ProductActivity, LoginActivity::class.java)
