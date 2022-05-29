@@ -16,5 +16,8 @@ class OrderViewHolder (view:View): RecyclerView.ViewHolder(view) {
         binding.txtFecha.text = dia
         binding.txtHora.text = hora
         binding.txtTotal.text = orderModel.total.toString()
+        binding.txtEstado.text = orderModel.estado
+
+
     }
 }

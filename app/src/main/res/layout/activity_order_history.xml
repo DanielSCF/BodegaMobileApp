@@ -23,6 +23,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:icon="@drawable/atras"
+            app:strokeColor="@color/white"
             app:iconTint="@color/azul"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

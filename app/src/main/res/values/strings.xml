@@ -51,4 +51,9 @@
 
     <string name="order_history">Historial de pedidos</string>
     <string name="orders">Pedidos</string>
+    <string name="product">Producto</string>
+    <string name="quantity">Cantidad</string>
+    <string name="brand">Marca</string>
+    <string name="subtotal">Subtotal</string>
+
 </resources>

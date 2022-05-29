@@ -9,14 +9,13 @@
     <item android:title="@string/information">
         <menu>
             <item
-                android:id="@+id/userInformation"
-                android:title="@string/user_information"
-                android:icon="@drawable/ic_account_information"/>
-
-            <item
                 android:id="@+id/clientInformation"
                 android:title="@string/client_information"
                 android:icon="@drawable/ic_personal_information"/>
+            <item
+                android:id="@+id/userInformation"
+                android:title="@string/change_password"
+                android:icon="@drawable/ic_lock"/>
             <item
                 android:id="@+id/orderInformation"
                 android:title="@string/order_information"

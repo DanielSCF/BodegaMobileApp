@@ -187,6 +187,7 @@ class CartActivity : AppCompatActivity(), OnItemListener {
             fecha = currentDate.toString(),
             total = total,
             modalidad = "RECOJO",
+            estado = "PENDIENTE",
             cliente = ClientModel(ClienteID, null, null, null, null, null),
             trabajador = null
         )
@@ -203,6 +204,7 @@ class CartActivity : AppCompatActivity(), OnItemListener {
                             null,
                             null,
                             null,
+                            "PENDIENTE",
                             null,
                             null
                         ),
