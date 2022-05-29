@@ -4,8 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import pe.idat.eduale.adapter.OrderAdapter
+import pe.idat.eduale.adapter.OrderProductAdapter
 import pe.idat.eduale.databinding.ActivityOrderPendientBinding
 import pe.idat.eduale.model.OrderDetailModel
 import pe.idat.eduale.network.OrderDetailService
@@ -19,6 +21,10 @@ class OrderPendientActivity : AppCompatActivity(), OnOrderListener {
     private lateinit var binding:ActivityOrderPendientBinding
     private lateinit var orderAdapter:OrderAdapter
     private lateinit var gridLayoutManager: GridLayoutManager
+
+    //private lateinit var orderProductAdapter: OrderProductAdapter
+    //private lateinit var gridProductManager: GridLayoutManager
+
     var orderList = mutableListOf<OrderDetailModel>()
 
 
@@ -43,6 +49,9 @@ class OrderPendientActivity : AppCompatActivity(), OnOrderListener {
         gridLayoutManager = GridLayoutManager(this, 1)
 
         getMyData()
+
+        //orderProductAdapter = OrderProductAdapter(mutableListOf())
+        //gridProductManager = GridLayoutManager(this, 1)
 
         binding.recyclerOrder.apply {
             setHasFixedSize(true)
@@ -70,6 +79,10 @@ class OrderPendientActivity : AppCompatActivity(), OnOrderListener {
 
                 orderAdapter = OrderAdapter(orderList,true, this@OrderPendientActivity)
                 orderAdapter.notifyDataSetChanged()
+
+                //orderProductAdapter = OrderProductAdapter(orderList)
+                //orderProductAdapter.notifyDataSetChanged()
+
                 binding.recyclerOrder.adapter = orderAdapter
 
             }
@@ -81,7 +94,9 @@ class OrderPendientActivity : AppCompatActivity(), OnOrderListener {
     }
 
     override fun onOrderClick(position: Int) {
-        TODO("Not yet implemented")
+        val item = orderList.get(position)
+
+        Toast.makeText(this, item.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun sendUserData(){

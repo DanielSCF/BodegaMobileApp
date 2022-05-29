@@ -56,5 +56,8 @@
     <string name="brand">Marca</string>
     <string name="subtotal">Subtotal</string>
     <string name="save">Guardar cambios</string>
+    <string name="date">Fecha: </string>
+    <string name="time">Hora: </string>
+    <string name="total">Total: S/. </string>
 
 </resources>
