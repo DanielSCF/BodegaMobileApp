@@ -41,6 +41,17 @@ class ProductDetailActivity : AppCompatActivity(), OnItemListener {
             value.putExtra("UsuarioID", UsuarioID)
             startActivity(value)
         }
+
+        binding.btnShoppingCart.setOnClickListener {
+            val objetoIntent: Intent = intent
+            val ClienteID = objetoIntent.getStringExtra("ClienteID")
+            val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+
+            val value = Intent(this, CartActivity::class.java)
+            value.putExtra("ClienteID", ClienteID)
+            value.putExtra("UsuarioID", UsuarioID)
+            startActivity(value)
+        }
     }
 
     //Inicializar valores de producto en la vista

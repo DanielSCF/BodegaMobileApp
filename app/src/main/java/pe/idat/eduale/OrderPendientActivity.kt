@@ -6,12 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
 import pe.idat.eduale.adapter.OrderAdapter
-import pe.idat.eduale.adapter.ProductAdapter
 import pe.idat.eduale.databinding.ActivityOrderPendientBinding
-import pe.idat.eduale.model.OrderModel
-import pe.idat.eduale.model.ProductModel
-import pe.idat.eduale.network.OrderService
-import pe.idat.eduale.network.ProductService
+import pe.idat.eduale.model.OrderDetailModel
+import pe.idat.eduale.network.OrderDetailService
 import pe.idat.eduale.network.RetroInstance
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,7 +19,7 @@ class OrderPendientActivity : AppCompatActivity(), OnOrderListener {
     private lateinit var binding:ActivityOrderPendientBinding
     private lateinit var orderAdapter:OrderAdapter
     private lateinit var gridLayoutManager: GridLayoutManager
-    var orderList = mutableListOf<OrderModel>()
+    var orderList = mutableListOf<OrderDetailModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,22 +28,18 @@ class OrderPendientActivity : AppCompatActivity(), OnOrderListener {
         setContentView(binding.root)
 
         binding.btnBack.setOnClickListener {
-            val value = Intent(this, ProductActivity::class.java)
+            sendUserData()
+        }
 
-            val objetoIntent: Intent = intent
-            val ClienteID = objetoIntent.getStringExtra("ClienteID")
-            val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
-            value.putExtra("ClienteID", ClienteID)
-            value.putExtra("UsuarioID", UsuarioID)
-            startActivity(value)
+        binding.btnHistory.setOnClickListener {
+            sendUserDataHistory()
         }
 
         initItems()
-
     }
 
     private fun initItems(){
-        orderAdapter = OrderAdapter(mutableListOf(), this@OrderPendientActivity)
+        orderAdapter = OrderAdapter(mutableListOf(), true,this@OrderPendientActivity )
         gridLayoutManager = GridLayoutManager(this, 1)
 
         getMyData()
@@ -59,13 +52,15 @@ class OrderPendientActivity : AppCompatActivity(), OnOrderListener {
     }
 
     private fun getMyData() {
-        val retrofitData =
-            RetroInstance().getRetroInstance().create(OrderService::class.java)
+        val objetoIntent: Intent = intent
+        val ClienteID = objetoIntent.getStringExtra("ClienteID").toString().toInt()
 
-        retrofitData.getPedidos().enqueue(object : Callback<List<OrderModel>?> {
+        val retrofitData = RetroInstance().getRetroInstance().create(OrderDetailService::class.java)
+
+        retrofitData.getOrderByClientIdAndState(ClienteID, "PENDIENTE").enqueue(object : Callback<List<OrderDetailModel>?> {
             override fun onResponse(
-                call: Call<List<OrderModel>?>,
-                response: Response<List<OrderModel>?>
+                call: Call<List<OrderDetailModel>?>,
+                response: Response<List<OrderDetailModel>?>
             ) {
                 val responseBody = response.body()
 
@@ -73,12 +68,12 @@ class OrderPendientActivity : AppCompatActivity(), OnOrderListener {
 
                 orderList.addAll(orders)
 
-                orderAdapter = OrderAdapter(orderList, this@OrderPendientActivity)
+                orderAdapter = OrderAdapter(orderList,true, this@OrderPendientActivity)
                 orderAdapter.notifyDataSetChanged()
                 binding.recyclerOrder.adapter = orderAdapter
 
             }
-            override fun onFailure(call: Call<List<OrderModel>?>, t: Throwable) {
+            override fun onFailure(call: Call<List<OrderDetailModel>?>, t: Throwable) {
                 Log.d("MainActivity", "onFailure: " + t.message)
             }
 
@@ -87,5 +82,27 @@ class OrderPendientActivity : AppCompatActivity(), OnOrderListener {
 
     override fun onOrderClick(position: Int) {
         TODO("Not yet implemented")
+    }
+
+    private fun sendUserData(){
+        val value = Intent(this, ProductActivity::class.java)
+
+        val objetoIntent: Intent = intent
+        val ClienteID = objetoIntent.getStringExtra("ClienteID")
+        val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+        value.putExtra("ClienteID", ClienteID)
+        value.putExtra("UsuarioID", UsuarioID)
+        startActivity(value)
+    }
+
+    private fun sendUserDataHistory(){
+        val value = Intent(this, OrderHistoryActivity::class.java)
+
+        val objetoIntent: Intent = intent
+        val ClienteID = objetoIntent.getStringExtra("ClienteID")
+        val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+        value.putExtra("ClienteID", ClienteID)
+        value.putExtra("UsuarioID", UsuarioID)
+        startActivity(value)
     }
 }

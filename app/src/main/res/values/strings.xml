@@ -55,5 +55,6 @@
     <string name="quantity">Cantidad</string>
     <string name="brand">Marca</string>
     <string name="subtotal">Subtotal</string>
+    <string name="save">Guardar cambios</string>
 
 </resources>

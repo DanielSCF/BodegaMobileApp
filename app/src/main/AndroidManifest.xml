@@ -15,9 +15,6 @@
         android:theme="@style/Theme.EdualeMobileApp"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name=".UserNicknameEditActivity"
-            android:exported="false" />
-        <activity
             android:name=".OrderHistoryActivity"
             android:exported="false" />
         <activity

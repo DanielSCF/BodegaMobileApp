@@ -236,7 +236,7 @@ class CartActivity : AppCompatActivity(), OnItemListener {
                                 response: Response<OrderDetailModel>
                             ) {
                                 if (response.isSuccessful) {
-                                    sendAppDataProduct()
+                                    sendAppDataOrder()
                                     clearCart()
                                     Toast.makeText(
                                         this@CartActivity,
@@ -284,6 +284,17 @@ class CartActivity : AppCompatActivity(), OnItemListener {
         val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
 
         val value = Intent(this, ProductActivity::class.java)
+        value.putExtra("ClienteID", ClienteID)
+        value.putExtra("UsuarioID", UsuarioID)
+        startActivity(value)
+    }
+
+    private fun sendAppDataOrder(){
+        val objetoIntent: Intent = intent
+        val ClienteID = objetoIntent.getStringExtra("ClienteID")
+        val UsuarioID = objetoIntent.getStringExtra("UsuarioID")
+
+        val value = Intent(this, OrderPendientActivity::class.java)
         value.putExtra("ClienteID", ClienteID)
         value.putExtra("UsuarioID", UsuarioID)
         startActivity(value)
