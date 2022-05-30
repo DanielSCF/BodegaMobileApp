@@ -15,6 +15,7 @@ class OrderProductViewHolder(view:View): RecyclerView.ViewHolder(view) {
         binding.txtCantidad.text = orderDetailModel.cantidad.toString()
         binding.txtSubtotal.text = orderDetailModel.subtotal.toString()
 
+
         Glide.with(binding.imgProducto.context).load(orderDetailModel.producto.imagen).into(binding.imgProducto)
     }
 }
