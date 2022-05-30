@@ -9,8 +9,8 @@ import pe.idat.eduale.model.OrderModel
 
 class OrderViewHolder (view:View): RecyclerView.ViewHolder(view) {
     var binding = ItemOrderBinding.bind(view)
-    var recyclerProduct = binding.recyclerProducts
     var btnCancelOrder = binding.btnCancelOrder
+    var orderCard = binding.OrderCard
 
     fun render(orderDetailModel: OrderDetailModel){
         val fecha = orderDetailModel.pedido.fecha.toString()

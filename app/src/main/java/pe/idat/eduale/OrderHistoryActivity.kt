@@ -90,5 +90,9 @@ class OrderHistoryActivity : AppCompatActivity(), OnOrderListener {
         TODO("Not yet implemented")
     }
 
+    override fun onCancelOrderClick(position: Int) {
+        TODO("Not yet implemented")
+    }
+
 
 }
